@@ -1,0 +1,650 @@
+{
+    "global_settings": {
+        "enable_global_optimization_settings": false,
+        "execution_mode": "single",
+        "global_expressions": {},
+        "global_variables": {},
+        "module_path": [
+            "modules",
+            "OledOpticsSimulator",
+            "OledOpticsSimulator.py"
+        ],
+        "optimization_settings": {
+            "maximize": true,
+            "maximum_number_of_iterations": 5,
+            "plot_every_steps": 1,
+            "solver": "L-BFGS-B"
+        },
+        "simoji_version": "0.1.0"
+    },
+    "samples": [
+        {
+            "enable": true,
+            "experimental_input": [
+                {
+                    "SRI data": [
+                        "/",
+                        "home",
+                        "christian",
+                        "PycharmProjects",
+                        "paper_oled_long_term_heating",
+                        "data",
+                        "OLED_2756_PL_TCTA-sandwich_temperature_variation",
+                        "190516_OLED-2756_initial",
+                        "M56_S54_p"
+                    ]
+                }
+            ],
+            "expressions": {},
+            "generic_parameters": {
+                "1D angle": [
+                    0.0,
+                    "VAR_0",
+                    false
+                ],
+                "1D calculation": true,
+                "2D angles": [
+                    0.0,
+                    90.0,
+                    1.0
+                ],
+                "2D calculation": false,
+                "Ex": [
+                    0.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "Ez": [
+                    -1.1,
+                    "G_VAR_0",
+                    false
+                ],
+                "Mx": [
+                    0.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "Mz": [
+                    1.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "amplitude": [
+                    1.0,
+                    "VAR_0",
+                    true
+                ],
+                "angle": [
+                    1.0,
+                    "VAR_0",
+                    false
+                ],
+                "angle cycle": 0.0,
+                "angle offset": [
+                    0.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "angles": [
+                    -89.0,
+                    89.0,
+                    1.0
+                ],
+                "boxcar": [
+                    10.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "calculate EQE": false,
+                "calculate SRI": true,
+                "calculate optical loss channels": false,
+                "calculate power dissipation spectra": false,
+                "do SRI correction": true,
+                "enable angle-wavelength grid": true,
+                "exclude angles": "(-5,5)",
+                "illumination direction": "top illumination",
+                "illumination spectrum": [
+                    "/",
+                    "home",
+                    "chaenisch",
+                    "PycharmProjects",
+                    "simoji",
+                    "simoji",
+                    "documentation",
+                    "validation",
+                    "field_distribution",
+                    "OSOLemio_API_tm_v2.00",
+                    "Spectra",
+                    "AM1.5g.txt"
+                ],
+                "intensity drift correction": "exponential",
+                "normalize SRI": true,
+                "plot mode power dissipation": "u",
+                "polarization": "p",
+                "position": [
+                    5.0,
+                    "VAR_0",
+                    false
+                ],
+                "reference angle": [
+                    10.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "shift z detector": [
+                    0.2,
+                    "G_VAR_0",
+                    false
+                ],
+                "shift z lens 2": [
+                    139.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "step width slices (nm)": [
+                    1.0,
+                    "VAR_0",
+                    false
+                ],
+                "substrate thickness": [
+                    1.1,
+                    "G_VAR_0",
+                    false
+                ],
+                "wave-vectors": [
+                    0.0,
+                    3.5,
+                    0.02
+                ],
+                "wavelengths": [
+                    500.0,
+                    700.0,
+                    1.0
+                ],
+                "width": [
+                    0.5,
+                    "VAR_0",
+                    false
+                ],
+                "x": [
+                    0.0,
+                    10.0,
+                    0.1
+                ]
+            },
+            "layers": [
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "glass",
+                    "parameters": {
+                        "material": "glass.fmf"
+                    },
+                    "type": "semi"
+                },
+                {
+                    "color": [
+                        0,
+                        0,
+                        200,
+                        50
+                    ],
+                    "enable": true,
+                    "name": "layer",
+                    "parameters": {
+                        "material": "glass.fmf",
+                        "thickness": [
+                            1100000.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "substrate"
+                },
+                {
+                    "color": [
+                        186,
+                        189,
+                        182,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "TCTA",
+                    "parameters": {
+                        "material": "organic.fmf",
+                        "thickness": [
+                            20.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        252,
+                        175,
+                        62,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "layer",
+                    "parameters": {
+                        "PL spectrum": "PLSpectrum_organic.txt",
+                        "anisotropy coefficient": [
+                            0.3333333333333333,
+                            "VAR_0",
+                            false
+                        ],
+                        "eta_rad": [
+                            1.0,
+                            "VAR_0",
+                            false
+                        ],
+                        "gamma": [
+                            1.0,
+                            "VAR_0",
+                            false
+                        ],
+                        "material": "organic.fmf",
+                        "number of dipoles": 1.0,
+                        "thickness": [
+                            30.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "emission"
+                },
+                {
+                    "color": [
+                        186,
+                        189,
+                        182,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "layer",
+                    "parameters": {
+                        "material": "organic.fmf",
+                        "thickness": [
+                            20.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "air",
+                    "parameters": {
+                        "material": "air.fmf"
+                    },
+                    "type": "semi"
+                }
+            ],
+            "name": "PL",
+            "optimization_settings": {
+                "maximize": false,
+                "maximum_number_of_iterations": 1000,
+                "name_of_value_to_be_optimized": "EQE",
+                "plot_every_steps": 1,
+                "solver": "Nelder-Mead"
+            },
+            "variables": {
+                "VAR_0": [
+                    0.25,
+                    0.1,
+                    0.4,
+                    1.0,
+                    true
+                ]
+            }
+        },
+        {
+            "enable": true,
+            "experimental_input": [
+                {
+                    "SRI data": [
+                        "/",
+                        "home",
+                        "christian",
+                        "PycharmProjects",
+                        "paper_oled_long_term_heating",
+                        "data",
+                        "OLED_2756_PL_TCTA-sandwich_temperature_variation",
+                        "190516_OLED-2756_initial",
+                        "M56_S54_p"
+                    ]
+                }
+            ],
+            "expressions": {},
+            "generic_parameters": {
+                "1D angle": [
+                    0.0,
+                    "VAR_0",
+                    false
+                ],
+                "1D calculation": true,
+                "2D angles": [
+                    0.0,
+                    90.0,
+                    1.0
+                ],
+                "2D calculation": false,
+                "Ex": [
+                    0.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "Ez": [
+                    -1.1,
+                    "G_VAR_0",
+                    false
+                ],
+                "Mx": [
+                    0.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "Mz": [
+                    1.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "amplitude": [
+                    1.0,
+                    "VAR_0",
+                    true
+                ],
+                "angle": [
+                    1.0,
+                    "VAR_0",
+                    false
+                ],
+                "angle cycle": 0.0,
+                "angle offset": [
+                    0.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "angles": [
+                    -89.0,
+                    89.0,
+                    1.0
+                ],
+                "boxcar": [
+                    10.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "calculate EQE": true,
+                "calculate SRI": true,
+                "calculate optical loss channels": true,
+                "calculate power dissipation spectra": true,
+                "do SRI correction": true,
+                "enable angle-wavelength grid": true,
+                "exclude angles": "(-5,5)",
+                "illumination direction": "top illumination",
+                "illumination spectrum": [
+                    "/",
+                    "home",
+                    "chaenisch",
+                    "PycharmProjects",
+                    "simoji",
+                    "simoji",
+                    "documentation",
+                    "validation",
+                    "field_distribution",
+                    "OSOLemio_API_tm_v2.00",
+                    "Spectra",
+                    "AM1.5g.txt"
+                ],
+                "intensity drift correction": "exponential",
+                "normalize SRI": true,
+                "plot mode power dissipation": "u",
+                "polarization": "p",
+                "position": [
+                    5.0,
+                    "VAR_0",
+                    false
+                ],
+                "reference angle": [
+                    10.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "shift z detector": [
+                    0.2,
+                    "G_VAR_0",
+                    false
+                ],
+                "shift z lens 2": [
+                    139.0,
+                    "G_VAR_0",
+                    false
+                ],
+                "step width slices (nm)": [
+                    1.0,
+                    "VAR_0",
+                    false
+                ],
+                "substrate thickness": [
+                    1.1,
+                    "G_VAR_0",
+                    false
+                ],
+                "wave-vectors": [
+                    0.0,
+                    3.5,
+                    0.02
+                ],
+                "wavelengths": [
+                    500.0,
+                    700.0,
+                    1.0
+                ],
+                "width": [
+                    0.5,
+                    "VAR_0",
+                    false
+                ],
+                "x": [
+                    0.0,
+                    10.0,
+                    0.1
+                ]
+            },
+            "layers": [
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "glass",
+                    "parameters": {
+                        "material": "glass.fmf"
+                    },
+                    "type": "semi"
+                },
+                {
+                    "color": [
+                        0,
+                        0,
+                        200,
+                        50
+                    ],
+                    "enable": true,
+                    "name": "layer",
+                    "parameters": {
+                        "material": "glass.fmf",
+                        "thickness": [
+                            1100000.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "substrate"
+                },
+                {
+                    "color": [
+                        0,
+                        200,
+                        0,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "layer",
+                    "parameters": {
+                        "material": "ITO.fmf",
+                        "thickness": [
+                            90.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        186,
+                        189,
+                        182,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "TCTA",
+                    "parameters": {
+                        "material": "organic.fmf",
+                        "thickness": [
+                            20.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        252,
+                        175,
+                        62,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "layer",
+                    "parameters": {
+                        "PL spectrum": "PLSpectrum_organic.txt",
+                        "anisotropy coefficient": [
+                            0.3333333333333333,
+                            "VAR_0",
+                            false
+                        ],
+                        "eta_rad": [
+                            1.0,
+                            "VAR_0",
+                            false
+                        ],
+                        "gamma": [
+                            1.0,
+                            "VAR_0",
+                            false
+                        ],
+                        "material": "organic.fmf",
+                        "number of dipoles": 1.0,
+                        "thickness": [
+                            30.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "emission"
+                },
+                {
+                    "color": [
+                        186,
+                        189,
+                        182,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "layer",
+                    "parameters": {
+                        "material": "organic.fmf",
+                        "thickness": [
+                            60.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        85,
+                        87,
+                        83,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "layer",
+                    "parameters": {
+                        "material": "Al.fmf",
+                        "thickness": [
+                            100.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "air",
+                    "parameters": {
+                        "material": "air.fmf"
+                    },
+                    "type": "semi"
+                }
+            ],
+            "name": "OLED",
+            "optimization_settings": {
+                "maximize": false,
+                "maximum_number_of_iterations": 1000,
+                "name_of_value_to_be_optimized": "EQE",
+                "plot_every_steps": 1,
+                "solver": "Nelder-Mead"
+            },
+            "variables": {
+                "VAR_0": [
+                    0.25,
+                    0.1,
+                    0.4,
+                    1.0,
+                    true
+                ]
+            }
+        }
+    ]
+}
