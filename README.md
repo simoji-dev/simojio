@@ -63,7 +63,8 @@ Modern IDEs such as [PyCharm](https://www.jetbrains.com/pycharm/) can include/au
 
 ## Deployment
 
-One can build an executable file by using pyinstaller in the top level folder:
+One can build an executable file by using pyinstaller and the respective specification file
+`simoji_builder.spec` (update path to top level folder: 'pathex') in the top level folder:
 
 `pyinstaller simoji_builder.spec`
 
