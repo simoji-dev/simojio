@@ -55,7 +55,7 @@ of using simoji. However, instead of setting a floating point value, you can fil
 For instance, the parameter `a` could be filled by a variable `VAR_0` as shown in the following screenshot of the simoji
 main window:
 
-<p align="center"><img src="simoji/lib/readme_pics/main_window_set_variable_on_parameter.png" width="800" ></p>
+<p align="center"><img src="simoji/lib/readme_pics/main_window_set_variable_on_parameter.png" width="400" ></p>
 
 Now simoji provides different execution modes which the user can choose. In `single` mode, the current value of the 
 `variable` is set for the parameter. Much more interesting, in `variation` mode, all values in the range between start 
@@ -71,7 +71,7 @@ result value of the module by walking through the parameter space defined by all
 parameters. In the following picture a comparison of result values from `variation` and `optimization` mode are given 
 for a calculation of the efficiency of an organic light-emitting diode depending on two thickness values.
 
-<p align="center"><img src="simoji/lib/readme_pics/variation_results.svg" width="800" ></p>
+<p align="center"><img src="simoji/lib/readme_pics/variation_results.svg" width="400" ></p>
 
 ## Prerequisites
 
