@@ -1,7 +1,4 @@
-[comment]: <> (<p align="center"><img src="simoji/lib/gui/icon/simoji_logo.svg" width="100" ></p>)
-
-***
-# simoji <img src="simoji/lib/gui/icon/simoji_logo.svg" width="100" >
+# simoji <img src="simoji/lib/gui/icon/simoji_logo.svg" width="50" >
 
 Simoji is an open source software which enables multidimensional variations of parameter based 
 calculation modules. It provides an intuitive and flexible GUI for managing multiple sets of 
