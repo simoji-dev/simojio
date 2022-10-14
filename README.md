@@ -78,17 +78,13 @@ for a calculation of the efficiency of an organic light-emitting diode depending
 Simoji is written in python3 and is cross-platform operable. It is tested with Windows10 and LinuxMint19 but 
 should, in principle, also work on other operating systems.
 
-The following python packages are required [NEEDS TO BE UPDATED!!]:
-> numpy>=1.10.0 <br>
-> scipy>=0.19 <br>
+The following python packages are required:
+> PySide2==5.15.2.1 <br>
+> numpy==1.19.5 <br>
+> scipy==1.5.4 <br>
 > matplotlib==3.2.2 <br>
-> PySide2 <br>
-> anytree <br>
-> psutil <br>
-> pydicom <br>
-> sympy>=0.7 <br>
-> emcee>=3.0.1 <br>
-> packaging <br>
+> anytree==2.8.0 <br>
+> psutil==5.9.0 <br>
 
 ## Installation
 These instructions will get you a copy of the project up and running on your local machine for usage and/or development. 
