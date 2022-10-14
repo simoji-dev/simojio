@@ -71,7 +71,7 @@ result value of the module by walking through the parameter space defined by all
 parameters. In the following picture a comparison of result values from `variation` and `optimization` mode are given 
 for a calculation of the efficiency of an organic light-emitting diode depending on two thickness values.
 
-<p align="center"><img src="simoji/lib/readme_pics/variation_results.pdf" width="800" ></p>
+<p align="center"><img src="simoji/lib/readme_pics/variation_results.svg" width="800" ></p>
 
 ## Prerequisites
 
