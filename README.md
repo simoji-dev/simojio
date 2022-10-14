@@ -1,4 +1,4 @@
-# simoji <img src="simoji/lib/gui/icon/simoji_logo.svg" width="50" >
+# <img src="simoji/lib/gui/icon/simoji_logo.svg" width="30" > simoji 
 
 Simoji is an open source software which enables multidimensional variations of parameter based 
 calculation modules. It provides an intuitive and flexible GUI for managing multiple sets of 
