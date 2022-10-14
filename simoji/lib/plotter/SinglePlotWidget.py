@@ -25,15 +25,11 @@ class SinglePlotWidget(QtWidgets.QScrollArea):
 
     def update_plot(self, fig):
 
-        # self._renew_canvas()
-
         self.current_fig = fig
         if (self.update_counter % self.plot_every_steps) == 0:
             self._renew_canvas()
             self.canvas.update_plot(fig)
         self.update_counter += 1
-
-        # self.resize(self.canvas.sizeHint().width(), self.canvas.sizeHint().height())
 
     def _renew_canvas(self):
 

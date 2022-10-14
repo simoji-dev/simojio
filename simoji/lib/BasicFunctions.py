@@ -4,23 +4,18 @@ import importlib
 import sys
 import inspect
 import numpy as np
-import platform
 import warnings
 import collections.abc
-import argparse
 import json
 import datetime
 from configparser import ConfigParser
 
 from typing import List
-from scipy.interpolate import interp2d, interp1d  # for projection onto angle-wavelength grid
+from scipy.interpolate import interp2d, interp1d
 from scipy.signal import savgol_filter
-from scipy.interpolate import InterpolatedUnivariateSpline  # TODO: replace with numpy interpolation
-from io import StringIO
+from scipy.interpolate import InterpolatedUnivariateSpline
 
-from simoji.lib.enums.ExecutionMode import ExecutionMode
-from simoji.lib.abstract_modules import *
-from typing import Union, Optional
+from typing import Union
 
 
 def icon_path(relative_path):
@@ -67,7 +62,6 @@ def convert_path_str_to_list(path_str: str, extract_relative_path_only=True) -> 
 
     if extract_relative_path_only:
         # get relative path to current working directory to assure portability
-        # https://stackoverflow.com/a/57153766
         parent = Path(os.path.abspath(os.curdir))
         son = Path(path_str)
         if parent in son.parents or parent==son:
@@ -83,7 +77,6 @@ def convert_module_path_to_import_str(module_path: str, module_root_path=None) -
     path = os.path.normpath(module_path)
     splitted_path = path.split(os.sep)
     import_str = "simoji." + ".".join(splitted_path[splitted_path.index(module_root_path):]).rstrip('.py')
-    # import_str = ".".join(splitted_path[splitted_path.index(module_root_path):]).rstrip('.py')
     return import_str
 
 
@@ -254,10 +247,6 @@ def savgol_smooth(data: np.array, boxcar: int, polyorder: int) -> np.array:
             if not is_odd(window_length):
                 window_length = boxcar - 1
             with warnings.catch_warnings():
-                # ignore warning: "FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated
-                # use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index,
-                # `arr[np.array(seq)]`, which will result either in an error or a different result. b = a[a_slice]"
-                # -> should be solved in scipy1.2.0 (https://github.com/scipy/scipy/issues/9086)
                 warnings.simplefilter("ignore")
                 y = savgol_filter(data[i], window_length, polyorder, deriv=0, delta=1.0, axis=-1, mode='interp',
                                   cval=0.0)
@@ -277,7 +266,7 @@ def interpol(x, y, order=None):
     :param y: values
     :return: function y(x)
     """
-    if order == None:
+    if order is None:
         if len(x) > 3:
             order = 3  # cubic interpolation (works for more than 3 entries)
         elif len(x) > 2:
@@ -299,15 +288,13 @@ def interpol(x, y, order=None):
     for i in range(len(x)):
         if x[i] in check_list:
             pass
-            # print(x[i], y[i], y[check_list.index(x[i])])
         else:
             x_new.append(x[i])
             y_new.append(y[i])
         check_list.append(x[i])
 
     try:
-        func = InterpolatedUnivariateSpline(x_new, y_new, k=order,
-                                            ext=extrapolation_mode)  # TODO: replace with numpy interpolation
+        func = InterpolatedUnivariateSpline(x_new, y_new, k=order, ext=extrapolation_mode)
     except:
         raise ValueError
     return func
@@ -341,8 +328,7 @@ def is_jsonable(x):
 
 def update_nested_dict(initial_dict, new_dict):
     """
-    Update of nested dictionaries. Input dictionary is updated.
-    [https://stackoverflow.com/questions/3232943/update-value-of-a-nested-dictionary-of-varying-depth]
+    Update of nested dictionaries.
     :param initial_dict: dictionary that should be updated
     :param new_dict: dictionary that should be merged into the initial dict
     """
@@ -352,30 +338,6 @@ def update_nested_dict(initial_dict, new_dict):
         else:
             initial_dict[k] = v
     return initial_dict
-
-
-def get_save_path(root_save_path: str, is_simulator_module: bool, is_coupled_evaluation: bool, sample_name: str,
-                  dataset_name: Optional[str] = None):
-
-    # if isinstance(module, DataSetReader) or isinstance(module, Fitter):
-    #     is_simulator_module = False
-    # else:
-    #     is_simulator_module = True
-
-    if is_simulator_module:
-        save_path = os.path.join(root_save_path, sample_name)
-    else:
-        if dataset_name is None:
-            raise ValueError("No dataset name defined")
-        if is_coupled_evaluation:
-            save_path = os.path.join(root_save_path, dataset_name, sample_name)
-        else:
-            save_path = os.path.join(root_save_path, sample_name, dataset_name)
-
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-
-    return save_path
 
 
 def write_to_ini(file_path: str, section_name: str, values_dict: dict):
@@ -398,14 +360,14 @@ def write_to_ini(file_path: str, section_name: str, values_dict: dict):
 
 
 def chunks(lst, n):
-    """Yield successive n-sized chunks from lst.
-    Taken from https://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks"""
+    """Yield successive n-sized chunks from lst"""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
 
 def get_time_stamp() -> str:
-    # -- create time stemp string in order to use it as suffix for the coupled directory --
+    """Create time stemp string in order to use it as suffix for the coupled directory"""
+
     time_stamp_wo_ms = str(datetime.datetime.now()).split('.')[0]  # date and time separated by space
     time_stamp_joined = time_stamp_wo_ms.replace(" ", "_")  # h:min:sec -> avoid ':'
     time_stamp = time_stamp_joined.replace(":", "-")

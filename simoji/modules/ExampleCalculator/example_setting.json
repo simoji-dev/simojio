@@ -1,0 +1,84 @@
+{
+    "global_settings": {
+        "enable_global_optimization_settings": false,
+        "execution_mode": "single",
+        "global_expressions": {},
+        "global_variables": {},
+        "module_path": [
+            "modules",
+            "ExampleCalculator",
+            "ExampleCalculator.py"
+        ],
+        "optimization_settings": {
+            "maximize": false,
+            "maximum_number_of_iterations": 1000,
+            "plot_every_steps": 1,
+            "solver": "Nelder-Mead"
+        },
+        "simoji_version": "2.0.0"
+    },
+    "samples": [
+        {
+            "enable": true,
+            "evaluation_set_parameters": [],
+            "expressions": {},
+            "generic_parameters": {
+                "amplitude": [
+                    1.0,
+                    "",
+                    false
+                ],
+                "position": [
+                    5.0,
+                    "",
+                    false
+                ],
+                "width": [
+                    1.0,
+                    "",
+                    false
+                ],
+                "x": [
+                    0.0,
+                    10.0,
+                    0.1
+                ]
+            },
+            "layers": [
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "top semi",
+                    "parameters": {},
+                    "type": "semi"
+                },
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "bottom semi",
+                    "parameters": {},
+                    "type": "semi"
+                }
+            ],
+            "name": "sample1",
+            "optimization_settings": {
+                "maximize": false,
+                "maximum_number_of_iterations": 1000,
+                "name_of_value_to_be_optimized": "amplitude",
+                "plot_every_steps": 1,
+                "solver": "Nelder-Mead"
+            },
+            "variables": {}
+        }
+    ]
+}

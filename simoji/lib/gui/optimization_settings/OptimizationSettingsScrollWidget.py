@@ -2,7 +2,7 @@ import PySide2.QtWidgets as QtWidgets
 
 from simoji.lib.gui.optimization_settings.OptimizationSettingsWidget import OptimizationSettingsWidget
 from simoji.lib.OptimizationSettingsContainer import OptimizationSettingsContainer
-from simoji.lib.abstract_modules import *
+from simoji.lib.abstract_modules import AbstractModule
 
 
 class OptimizationSettingsScrollWidget(QtWidgets.QScrollArea):

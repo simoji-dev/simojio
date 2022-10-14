@@ -10,7 +10,6 @@ from simoji.lib.gui.decoration.QHLine import QHLine
 from simoji.lib.BasicFunctions import *
 
 from typing import Union
-import os
 
 
 class ParameterWidget(QtWidgets.QWidget):

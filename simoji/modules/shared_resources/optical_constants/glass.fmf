@@ -1,0 +1,20 @@
+; -*- coding: cp1252; fmf-version: 1.0 -*-
+[*reference]
+title	: optical constants of glass substrate
+short name	: glass
+long name	: glass
+creator	: simoji
+created	: 2022-10-14 10:00:00+01:00
+comment	: values just defined
+
+[output parameter]
+material type : isotropic
+
+[*data definitions]
+wavelength	:\lambda [nm]
+n	:n(\lambda)
+k	:k(\lambda)
+
+[*data]
+400. 1.5 0.0
+1000. 1.5 0.0

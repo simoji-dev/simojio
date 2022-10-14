@@ -14,12 +14,12 @@ from simoji.lib.OptimizationSettingsContainer import OptimizationSettingsContain
 from simoji.lib.enums.ParameterCategory import ParameterCategory
 from simoji.lib.parameters import *
 from simoji.lib.enums.ExecutionMode import ExecutionMode
+from simoji.lib.abstract_modules import AbstractModule
 
 from typing import Union
 
 
 class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
-
     update_global_free_parameters_sig = Signal(list)
 
     def __init__(self):
@@ -27,6 +27,7 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
         super().__init__()
 
         self.execution_mode = None
+        self.all_widgets = []
 
         self._variables_label = "Global variables"
         self._variables_widget = ParameterContainerScrollWidget(is_module_dependent=False)
@@ -35,7 +36,8 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
             self._sync_free_parameter_deleted)
         self._variables_dock_widget = self._add_dockwidget(self._variables_label, self._variables_widget)
         self._variables_dock_widget.setObjectName("Global variables")
-        self._variables_dock_widget.visibilityChanged.connect(self._show_variables)
+        self._variables_dock_widget.visibilityChanged.connect(
+            lambda: self._show_variables(self._variables_dock_widget.isVisible()))
         self._is_variables_widget_shown = False
 
         self._expressions_label = "Global expressions"
@@ -45,14 +47,16 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
             self._sync_free_parameter_deleted)
         self._expressions_dock_widget = self._add_dockwidget(self._expressions_label, self._expressions_widget)
         self._expressions_dock_widget.setObjectName("Global expressions")
-        self._expressions_dock_widget.visibilityChanged.connect(self._show_expressions)
+        self._expressions_dock_widget.visibilityChanged.connect(
+            lambda: self._show_expressions(self._expressions_dock_widget.isVisible()))
         self._is_expressions_widget_shown = False
 
         self._optimization_label = "Global optimization settings"
         self._optimization_widget = OptimizationSettingsScrollWidget(show_sample_related_settings=False)
         self._optimization_dock_widget = self._add_dockwidget(self._optimization_label, self._optimization_widget)
         self._optimization_dock_widget.setObjectName("Global optimization settings")
-        self._optimization_dock_widget.visibilityChanged.connect(self._show_optimization_widget)
+        self._optimization_dock_widget.visibilityChanged.connect(
+            lambda: self._show_optimization_widget(self._optimization_dock_widget.isVisible()))
         self._is_optimization_widget_shown = False
         self._global_optimization_settings_enabled = False
 
@@ -163,6 +167,9 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
         for variable_widget in variable_widgets:
             self._enable_variable_subwidgets(variable_widget)
 
+    def set_module(self, module: AbstractModule):
+        self._optimization_widget.set_module(module)
+
     def _get_button(self, label: str, icon: QtGui.QIcon, is_shown: bool) -> QtWidgets.QWidget:
 
         width = 25
@@ -184,12 +191,12 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
         btn_style = self._get_side_toolbar_pushbutton_style(btn_is_checked=self._is_variables_widget_shown)
         self._global_variables_btn.setStyleSheet(btn_style)
 
-        self.resize(self._variables_dock_widget.sizeHint())
-
         if self._is_variables_widget_shown:
             self._variables_dock_widget.show()
         else:
             self._variables_dock_widget.hide()
+
+        self._resize_to_minimum()
 
     def _show_expressions(self, show_bool: bool):
 
@@ -198,12 +205,12 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
         btn_style = self._get_side_toolbar_pushbutton_style(btn_is_checked=self._is_expressions_widget_shown)
         self._global_expressions_btn.setStyleSheet(btn_style)
 
-        self.resize(self._expressions_dock_widget.sizeHint())
-
         if self._is_expressions_widget_shown:
             self._expressions_dock_widget.show()
         else:
             self._expressions_dock_widget.hide()
+
+        self._resize_to_minimum()
 
     def _show_optimization_widget(self, show_bool: bool):
         self._is_optimization_widget_shown = show_bool
@@ -212,14 +219,15 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
                                                             enabled=self._global_optimization_settings_enabled)
         self._optimization_settings_btn.setStyleSheet(btn_style)
 
-        self.resize(self._optimization_widget.sizeHint())
-
         if self._is_optimization_widget_shown:
             self._optimization_dock_widget.show()
         else:
             self._optimization_dock_widget.hide()
 
-    def _get_side_toolbar_pushbutton_style(self, btn_is_checked: bool, enabled=False) -> str:
+        self._resize_to_minimum()
+
+    @staticmethod
+    def _get_side_toolbar_pushbutton_style(btn_is_checked: bool, enabled=False) -> str:
         """set background grey if button is checked"""
 
         if enabled:
@@ -241,10 +249,12 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
     def _add_dockwidget(self, name, widget):
 
         dockWidget = QtWidgets.QDockWidget(self)
-        dockWidget.setFeatures(QtWidgets.QDockWidget.DockWidgetMovable| QtWidgets.QDockWidget.DockWidgetClosable)
+        dockWidget.setFeatures(QtWidgets.QDockWidget.DockWidgetMovable | QtWidgets.QDockWidget.DockWidgetClosable)
         dockWidget.setWindowTitle(name)
         dockWidget.setStyleSheet("QDockWidget {font: bold}")
         dockWidget.setWidget(widget)
+
+        self.all_widgets.append(widget)
 
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dockWidget)
 
@@ -333,6 +343,10 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
 
         self.update_global_free_parameters_sig.emit(self._get_free_parameter_names())
 
+    def _resize_to_minimum(self):
 
-
-
+        if any([self._is_variables_widget_shown, self._is_expressions_widget_shown,
+                self._is_optimization_widget_shown]):
+            self.setMaximumWidth(self.parent().parent().width())
+        else:
+            self.setMaximumWidth(25)

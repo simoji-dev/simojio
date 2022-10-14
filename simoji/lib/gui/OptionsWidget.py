@@ -10,6 +10,7 @@ class OptionsWidget(QtWidgets.QWidget):
 
         self.category_layout_dict = {}      # {category name: layout}
         self.option_widget_dict = {}        # {option name: widget}
+        self.option_label_widget_dict = {}  # {option name: label widget}
 
         self.label_minimum_width = 200
 
@@ -61,6 +62,7 @@ class OptionsWidget(QtWidgets.QWidget):
         self.category_layout_dict[category_name].addLayout(option_layout)
 
         self.option_widget_dict.update({option_label: option_widget})
+        self.option_label_widget_dict.update({option_label: option_label_widget})
 
     def get_options(self) -> dict:
         """Return dict of labels and current values"""

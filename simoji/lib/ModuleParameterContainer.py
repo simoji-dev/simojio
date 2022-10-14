@@ -12,8 +12,6 @@ class ModuleParameterContainer:
     """
     Stores all the parameters of a certain module. Needs to be initialized in the class body of each module and filled
     with the available parameters set to their default values.
-
-    # for layer_types: add_layer_parameter with default value 'standard' for layer_type (other types still need enum)
     """
 
     def __init__(self):
@@ -21,12 +19,6 @@ class ModuleParameterContainer:
         self._parameters = {}  # {"category": {"par1_name": par1, "par2_name": par2, ..}}
 
     def add_generic_parameter(self, parameter: Union[SingleParameter, NestedParameter, MultivalueParameter]):
-        """
-
-        :param parameter: SingleParameter, NestedParameter, or MultivalueParameter
-        :return:
-        """
-
         if ParameterCategory.GENERIC not in self._parameters:
             self._parameters.update({ParameterCategory.GENERIC: {}})
 
@@ -36,21 +28,16 @@ class ModuleParameterContainer:
         for parameter in parameters:
             self.add_generic_parameter(parameter)
 
-    def add_dataset_parameter(self, parameter: Union[SingleParameter, NestedParameter, MultivalueParameter]):
-        """
+    def add_evaluation_set_parameter(self, parameter: Union[SingleParameter, NestedParameter, MultivalueParameter]):
+        if ParameterCategory.EVALUATION_SET not in self._parameters:
+            self._parameters.update({ParameterCategory.EVALUATION_SET: {}})
 
-        :param parameter: SingleParameter, NestedParameter, or MultivalueParameter
-        :return:
-        """
+        self._parameters[ParameterCategory.EVALUATION_SET][parameter.name] = parameter
 
-        if ParameterCategory.DATASET not in self._parameters:
-            self._parameters.update({ParameterCategory.DATASET: {}})
-
-        self._parameters[ParameterCategory.DATASET][parameter.name] = parameter
-
-    def add_dataset_parameters(self, parameters: List[Union[SingleParameter, NestedParameter, MultivalueParameter]]):
+    def add_evaluation_set_parameters(self, parameters: List[Union[SingleParameter, NestedParameter,
+                                                                   MultivalueParameter]]):
         for parameter in parameters:
-            self.add_dataset_parameter(parameter)
+            self.add_evaluation_set_parameter(parameter)
 
     def add_layer_parameters(self, parameters: List[Union[SingleParameter, NestedParameter, MultivalueParameter]],
                              layer_type: LayerType):
@@ -73,8 +60,8 @@ class ModuleParameterContainer:
 
             if category is ParameterCategory.GENERIC:
                 self.add_generic_parameters(submodule_parameters)
-            elif category is ParameterCategory.DATASET:
-                self.add_dataset_parameters(submodule_parameters)
+            elif category is ParameterCategory.EVALUATION_SET:
+                self.add_evaluation_set_parameters(submodule_parameters)
             elif isinstance(category, LayerType):
                 self.add_layer_parameters(submodule_parameters, layer_type=category)
 
@@ -90,17 +77,17 @@ class ModuleParameterContainer:
 
         self.add_generic_parameters(submodule_parameters)
 
-    def add_submodule_dataset_parameters(self, module, exclude_parameters: Optional[List[
+    def add_submodule_evaluation_set_parameters(self, module, exclude_parameters: Optional[List[
         Union[SingleParameter, NestedParameter, MultivalueParameter]]] = None):
 
         if exclude_parameters is None:
             exclude_parameters = []
 
         submodule_parameters = [parameter for parameter in
-                                module.module_parameters.get_parameters(ParameterCategory.DATASET).values()
+                                module.module_parameters.get_parameters(ParameterCategory.EVALUATION_SET).values()
                                 if parameter not in exclude_parameters]
 
-        self.add_dataset_parameters(submodule_parameters)
+        self.add_evaluation_set_parameters(submodule_parameters)
 
     def add_submodule_layer_parameters(self, module, exclude_parameters: Optional[List[
             Union[SingleParameter, NestedParameter, MultivalueParameter]]] = None):
@@ -143,3 +130,6 @@ class ModuleParameterContainer:
 
     def get_categories(self) -> list:
         return list(self._parameters.keys())
+
+    def has_evaluation_parameters(self) -> bool:
+        return ParameterCategory.EVALUATION_SET in self.get_categories()

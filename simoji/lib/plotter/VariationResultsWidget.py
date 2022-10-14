@@ -14,14 +14,13 @@ class VariationResultsWidget(QtWidgets.QWidget):
         self.setLayout(self.layout)
 
         self.variation_results_container = variation_results_container
-        self.variable_set_prefix = "var_set_"
 
         self.nb_var_names = len(self.variation_results_container.variable_names)
         self.horizontal_header_list = self.variation_results_container.variable_names + \
                                       self.variation_results_container.result_names
         nb_cols = len(self.horizontal_header_list)
         nb_rows = len(self.variation_results_container.variable_values_list)
-        self.vertical_header_list = [self.variable_set_prefix + str(idx) for idx in np.arange(nb_rows)]
+        self.vertical_header_list = variation_results_container.row_names
 
         self.table_widget = QtWidgets.QTableWidget(nb_rows, nb_cols, self)
         self.table_widget.setHorizontalHeaderLabels(self.horizontal_header_list)

@@ -1,5 +1,4 @@
 from simoji.lib.parameters.AnyStringParameter import AnyStringParameter
-from simoji.lib.enums.ParameterCategory import ParameterCategory
 
 
 class Expression(AnyStringParameter):

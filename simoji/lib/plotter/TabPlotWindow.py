@@ -1,14 +1,8 @@
-# PySide2 stuff
 import PySide2.QtWidgets as QtWidgets
 import PySide2.QtCore as QtCore
-import PySide2.QtGui as QtGui
 
-# Pyplot stuff
 import matplotlib
-
-matplotlib.use("Qt5Agg")
 import matplotlib.pyplot as plt
-
 import os
 import numpy as np
 
@@ -18,6 +12,8 @@ from simoji.lib.plotter.OptimizationResultsWidget import OptimizationResultsWidg
 from simoji.lib.plotter.VariationResultsWidget import VariationResultsWidget
 from simoji.lib.VariationResultsContainer import VariationResultsContainer
 from simoji.lib.plotter.SaveDataFileFormats import SaveDataFileFormats
+
+matplotlib.use("Qt5Agg")
 
 
 class TabPlotWindow(QtWidgets.QMainWindow):
@@ -94,8 +90,14 @@ class TabPlotWindow(QtWidgets.QMainWindow):
                     steps = np.arange(len(variation_results.variation_results_list))
                     values = result_values[idx]
                     ax.plot(steps, values, 'o-', label=label)
+
+                ax.set_xticks(steps)
+                rotation = 0
+                if len(steps) > 5:
+                    rotation = 90
+                ax.set_xticklabels(variation_results.row_names, rotation=rotation)
                 ax.legend()
-                ax.set_xlabel("variation set")
+                # ax.set_xlabel("variation set")
                 ax.set_ylabel("result value")
                 fig.tight_layout()
                 self.variation_results_plot.update_plot(fig)
@@ -116,14 +118,6 @@ class TabPlotWindow(QtWidgets.QMainWindow):
 
     def save(self, save_path: str, save_file_format: SaveDataFileFormats):
         """Save data of all plots and text widgets."""
-
-        # -- save variation overview table + plot --
-        if self.variation_results_plot is not None:
-            widget_save_path = os.path.join(save_path, "variation_results_plot")
-            self.variation_results_plot.save_figure(widget_save_path, save_file_format)
-        if self.variation_results_widget is not None:
-            widget_save_path = os.path.join(save_path, "variation_results_data")
-            self.variation_results_widget.save_data(widget_save_path)
 
         for idx, [dock_widget, title, save] in enumerate(self.figure_list):
             if save:

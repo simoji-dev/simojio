@@ -1,14 +1,9 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
-import PySide2.QtCore as QtCore
-
 from simoji.lib.parameters.MultiStringParameter import MultiStringParameter
 from simoji.lib.gui.parameter_widgets.ParameterWidget import ParameterWidget
 from simoji.lib.gui.CustomCombo import CustomCombo
 
 
 class MultiStringParWidget(ParameterWidget):
-    """Widget that contains single float parameters."""
 
     def __init__(self, parameter: MultiStringParameter, is_sub_parameter=False):
 

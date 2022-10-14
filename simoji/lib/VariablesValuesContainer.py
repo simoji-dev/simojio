@@ -3,7 +3,6 @@ import copy
 
 
 class VariablesValuesContainer:
-    """Contains the values of all variables_and_expressions"""
 
     def __init__(self):
 
@@ -13,7 +12,6 @@ class VariablesValuesContainer:
     def set_values(self, value_dict: dict):
 
         for par_name in value_dict:
-            # if par_name.startswith(Variable.prefix):
             try:
                 parameter = copy.deepcopy(self.default_variable)
                 parameter.name = par_name

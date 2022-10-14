@@ -1,0 +1,20 @@
+; -*- coding: cp1252; fmf-version: 1.0 -*-
+[*reference]
+title	: optical constants of organic thin-film
+short name	: organic
+long name	: organic
+creator	: simoji
+created	: 2022-10-14 10:00:00+01:00
+comment	: values just defined
+
+[output parameter]
+material type : isotropic
+
+[*data definitions]
+wavelength	:\lambda [nm]
+n	:n(\lambda)
+k	:k(\lambda)
+
+[*data]
+0. 1.8 0.
+5000. 1.8 0.

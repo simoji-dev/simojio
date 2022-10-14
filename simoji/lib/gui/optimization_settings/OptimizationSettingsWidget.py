@@ -1,11 +1,10 @@
 import PySide2.QtWidgets as QtWidgets
 import PySide2.QtGui as QtGui
-import PySide2.QtCore as QtCore
 from PySide2.QtCore import Signal
 
 from simoji.lib.OptimizationSettingsContainer import OptimizationSettingsContainer
 from simoji.lib.gui.OptionsWidget import OptionsWidget
-from simoji.lib.abstract_modules import *
+from simoji.lib.abstract_modules import AbstractModule, Calculator, Fitter
 
 
 class OptimizationSettingsWidget(OptionsWidget):
@@ -30,13 +29,10 @@ class OptimizationSettingsWidget(OptionsWidget):
             self.value_to_be_optimized_combo = QtWidgets.QComboBox()
             self.value_to_be_optimized_combo.activated[str].connect(self._update_name_of_value_to_be_optimized)
 
-            # weight
-            # todo
-
             # add options to category
             self.add_option_to_category(category_name=self.sample_related_options_header_str,
-                                                       option_label=self.value_to_be_optimized_label,
-                                                       option_widget=self.value_to_be_optimized_combo)
+                                        option_label=self.value_to_be_optimized_label,
+                                        option_widget=self.value_to_be_optimized_combo)
 
         # -- solver related settings --
         self.solver_related_options_header_str = "Solver related settings:"
@@ -84,12 +80,13 @@ class OptimizationSettingsWidget(OptionsWidget):
         """Update list of optimization value names"""
 
         self.current_module = module
+        self.enable_maximize_checkbox()
 
         if self.show_sample_related_settings:
             previous_value = self.value_to_be_optimized_combo.currentText()
             new_values = []
-            if module.get_optimization_dict() is not None:
-                new_values = list(module.get_optimization_dict().keys())
+            if isinstance(module, Calculator) or isinstance(module, Fitter):
+                new_values = list(module.get_results_dict().keys())
             self.value_to_be_optimized_combo.clear()
             self.value_to_be_optimized_combo.addItems(new_values)
             if previous_value in new_values:
@@ -148,3 +145,11 @@ class OptimizationSettingsWidget(OptionsWidget):
 
     def enable_solver_settings(self, enable: bool):
         self.enable_category(self.solver_related_options_header_str, enable)
+
+    def enable_maximize_checkbox(self):
+        if isinstance(self.current_module, Fitter):
+            self.maximize_checkbox.hide()
+            self.option_label_widget_dict[self.maximize_label].hide()
+        else:
+            self.maximize_checkbox.show()
+            self.option_label_widget_dict[self.maximize_label].show()

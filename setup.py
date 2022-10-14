@@ -2,11 +2,10 @@ from setuptools import setup
 
 setup(
     name='simoji',
-    version='0.1.0_master',
+    version='2.0.0_master',
     packages=['simoji', 'simoji.modules'],
-    install_requires=['numpy>=1.10.0', 'scipy>=0.19', 'matplotlib==3.2.2', 'lmfit>=0.9.12', 'pydicom', 'sympy>=0.7',
-                      'numdifftools>=0.9', 'PySide2', 'emcee>=3.0.1', 'anytree', 'Cython', 'packaging', 'psutil',
-                      'tmm'],
+    install_requires=['PySide2', 'numpy>=1.10.0', 'scipy>=0.19', 'matplotlib==3.2.2', 'pydicom', 'sympy>=0.7',
+                      'emcee>=3.0.1', 'anytree', 'packaging', 'psutil'],
     url='https://github.com/simoji-dev/simoji',
     license='LGPLv3',
     author='Christian Haenisch',

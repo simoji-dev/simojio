@@ -1,20 +1,18 @@
 import json
+import os
+import copy
 
 from simoji.lib.Sample import Sample
-from simoji.lib.Layer import Layer
+from simoji.lib.CompleteLayer import CompleteLayer
 from simoji.lib.GlobalSettingsContainer import GlobalSettingsContainer
 from simoji.lib.enums.ExecutionMode import ExecutionMode
 from simoji.lib.enums.LayerType import LayerType
 import simoji.lib.BasicFunctions as BasicFunctions
 from simoji.lib.enums.ParameterCategory import ParameterCategory
 
-import copy
-
 
 class SettingManager:
-    """
-    Reads and writes simoji settings. Contains the definition of the keys to be used in the setting.
-    """
+    """Reads and writes simoji settings. Contains the definition of the keys to be used in the setting."""
 
     def __init__(self):
 
@@ -45,7 +43,7 @@ class SettingManager:
         self.sample_name_key = "name"
         self.sample_enable_key = "enable"
         self.generic_parameters_key = "generic_parameters"
-        self.experimental_input_key = "experimental_input"
+        self.evaluation_set_parameters_key = "evaluation_set_parameters"
         self.variables_key = "variables"
         self.expressions_key = "expressions"
 
@@ -57,11 +55,6 @@ class SettingManager:
         self.layer_parameters_key = "parameters"
 
     def read_setting(self, path: str) -> (GlobalSettingsContainer, list, bool):
-        """
-        Read simoji setting and translate it to container objects.
-        :param path:
-        :return: (global settings, list of sample objects, success)
-        """
 
         success = True
         module = None
@@ -119,9 +112,8 @@ class SettingManager:
 
                 if self.generic_parameters_key in sample_dict:
                     new_sample.set_generic_parameters(sample_dict[self.generic_parameters_key])
-                if self.experimental_input_key in sample_dict:
-                    # new_sample.set_experimental_parameter_values(sample_dict[self.experimental_input_key])
-                    new_sample.set_experimental_datasets_values(sample_dict[self.experimental_input_key])
+                if self.evaluation_set_parameters_key in sample_dict:
+                    new_sample.set_evaluation_sets_values(sample_dict[self.evaluation_set_parameters_key])
                 if self.variables_key in sample_dict:
                     new_sample.set_variables_values(sample_dict[self.variables_key])
                 if self.expressions_key in sample_dict:
@@ -151,7 +143,6 @@ class SettingManager:
             self.module_path_key: global_settings.module_path,
             self.execution_mode_key: global_settings.execution_mode,
             self.enable_global_optimization_settings_key: global_settings.use_global_optimization_settings,
-            # self.coupled_optimization_key: global_settings.do_coupled_optimization,
             self.global_variables_key: global_settings.get_variables_values(),
             self.global_expressions_key: global_settings.get_expressions_values(),
             self.optimization_settings_key: global_settings.get_optimization_settings_values()
@@ -166,6 +157,7 @@ class SettingManager:
             self.samples_key: sample_values_list
         }
 
+        os.makedirs(path[:path.rindex(os.path.sep)], exist_ok=True)
         json_file = open(path, 'w', encoding='utf-8')
         json.dump(setting_dict, json_file, sort_keys=True, indent=4)
         json_file.close()
@@ -180,10 +172,10 @@ class SettingManager:
                                                                       global_free_parameters_values_dict=None,
                                                                       replace_free_parameters=False,
                                                                       ignore_expression_errors=True),
-            self.experimental_input_key: sample.get_parameters_values(ParameterCategory.DATASET,
-                                                                      global_free_parameters_values_dict=None,
-                                                                      replace_free_parameters=False,
-                                                                      ignore_expression_errors=True),
+            self.evaluation_set_parameters_key: sample.get_parameters_values(ParameterCategory.EVALUATION_SET,
+                                                                             global_free_parameters_values_dict=None,
+                                                                             replace_free_parameters=False,
+                                                                             ignore_expression_errors=True),
             self.variables_key: sample.get_parameters_values(ParameterCategory.VARIABLE,
                                                              global_free_parameters_values_dict=None,
                                                              replace_free_parameters=False,
@@ -198,19 +190,19 @@ class SettingManager:
 
         return samples_dict
 
-    def _get_layer_obj_from_values_dict(self, values_dict: dict) -> Layer:
+    def _get_layer_obj_from_values_dict(self, values_dict: dict) -> CompleteLayer:
 
         layer_name = values_dict[self.layer_name_key]
         layer_type = LayerType(values_dict[self.layer_type_key])
         layer_enable = values_dict[self.layer_enable_key]
         layer_color = tuple(values_dict[self.layer_color_key])
 
-        layer = Layer(name=layer_name, layer_type=layer_type, enabled=layer_enable, color=layer_color)
+        layer = CompleteLayer(name=layer_name, layer_type=layer_type, enabled=layer_enable, color=layer_color)
         layer.set_parameters(values_dict[self.layer_parameters_key])
 
         return layer
 
-    def _get_layer_values_dict_from_layer_obj(self, layer: Layer) -> dict:
+    def _get_layer_values_dict_from_layer_obj(self, layer: CompleteLayer) -> dict:
 
         layer_dict = {
             self.layer_name_key: layer.name,

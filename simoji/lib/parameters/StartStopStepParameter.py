@@ -1,7 +1,4 @@
 from simoji.lib.parameters import *
-from simoji.lib.enums.ParameterCategory import ParameterCategory
-
-from typing import Optional
 
 
 class StartStopStepParameter(NestedParameter):

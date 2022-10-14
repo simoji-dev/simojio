@@ -3,6 +3,8 @@ class VariationResultsContainer:
 
     def __init__(self):
 
+        self.row_names = list()                 # ["variation set 1"]
+
         self.variable_names = list()            # ["VAR_0", "VAR_1"]
         self.variable_values_list = list()      # [[10, 0.1], [20, 0.1]]
 

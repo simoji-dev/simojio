@@ -3,7 +3,6 @@ import copy
 
 
 class ExpressionsValuesContainer:
-    """Contains the values of all variables_and_expressions"""
 
     def __init__(self):
 

@@ -1,9 +1,6 @@
 import PySide2.QtWidgets as QtWidgets
-from PySide2.QtCore import Signal
 import PySide2.QtGui as QtGui
 from simoji.lib.gui.decoration.QHLine import QHLine
-
-import os
 
 from simoji.lib.parameters.FloatParameter import FloatParameter
 from simoji.lib.BasicFunctions import *
@@ -54,11 +51,7 @@ class FloatParWidget(QtWidgets.QWidget):
         return [float(self.float_line_edit.text()), self.free_par_combo.currentText(), self.is_set_as_fit_parameter]
 
     def set_content(self, content: list):
-        """
 
-        :param content: [float-value, free-parameter, is_set_to_free_parameter_bool]
-        :return:
-        """
         self.float_line_edit.setText(str(content[0]))
 
         if content[2]:
@@ -108,7 +101,6 @@ class FloatParWidget(QtWidgets.QWidget):
         self.is_set_as_fit_parameter = False
 
     def update_free_parameters(self, free_parameter_names: list):
-        """Get list of current free parameter names"""
 
         previous_value = self.free_par_combo.currentText()
         self.free_par_combo.clear()

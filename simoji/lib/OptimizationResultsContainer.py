@@ -21,15 +21,6 @@ class OptimizationResultsContainer:
 
     def set_results(self, optimized_value_name: str, variable_names: list, variable_bounds: list, solver_name: str,
                     maximize: bool, results_obj: OptimizeResult):
-        """
-        Evaluates the result object returned by the solver.
-
-        Note:
-        Variables are constrained to be within given bounds by simoji (variables_and_expressions are set to boundary value before
-        passing them to the module if they are out of bounds). However, not all solvers take care of that meaning that
-        the _optimization_fct() may get variable values out of bounds.  Hence, we need to check manually if the final
-        variables_and_expressions returned by the solver are within the bounds.
-        """
 
         # if maximize, the negative function (-f) is minimized -> replace 'fun' value in results
         self.maximize = maximize
@@ -50,12 +41,6 @@ class OptimizationResultsContainer:
             # check, if variables_and_expressions are within bounds
             if (var_value >= max(variable_bounds[idx])) or (var_value <= min(variable_bounds[idx])):
                 self.variables_out_of_bounds_dict.update({var_name: var_value})
-            # if var_value >= max(variable_bounds[idx]):
-            #     var_value = max(variable_bounds[idx])
-            #     self.variables_at_bounds_dict.update({var_name: var_value})
-            # if var_value <= min(variable_bounds[idx]):
-            #     var_value = min(variable_bounds[idx])
-            #     self.variables_at_bounds_dict.update({var_name: var_value})
 
             self.variable_dict.update({var_name: var_value})
 

@@ -1,47 +1,94 @@
-from simoji.lib.ModuleParameterContainer import ModuleParameterContainer
-from simoji.lib.PlotContainer import PlotContainer
-import importlib
 import abc
-from typing import *
+import matplotlib.pyplot as plt
+from typing import Dict, List
+
+from simoji.lib.parameters import Parameter, FloatParameter, NestedParameter, SingleParameter
+from simoji.lib.PlotContainer import PlotContainer
+from simoji.lib.CallbackContainer import CallbackContainer
+from simoji.lib.Layer import Layer
 
 
 class AbstractModule(metaclass=abc.ABCMeta):
     """Abstract class that defines the basic methods and members of any simoji module"""
 
-    module_path = None  # relative path to the module given as list
-    module_parameters = ModuleParameterContainer()
-    queue = None    # multiprocessing.Queue
+    module_path = None                       # relative path to the module given as list
+    queue = None                             # multiprocessing.Queue for communication of results
+    simoji_save_dir = None                   # save directory of the specific module instance
 
-    _simoji_save_dir = None
+    generic_parameters = list()              # list of defined generic parameters
+    evaluation_set_parameters = list()       # list of defined evaluation set parameters
+    available_layers = list()                # list of available layers (List[Layer])
+    layer_list = list()                      # sequence of layers used for calculation
 
     def __init__(self):
         pass
 
-    def configure_generic_parameters(self, generic_parameters: dict):
+    @classmethod
+    def __subclasshook__(cls, subclass):
+        """
+        This guarantees that issubclass() only returns True if all mandatory methods are implemented.
+        :param subclass:
+        :return:
+        """
+        return (hasattr(subclass, 'run') and
+                callable(subclass.run) or
+                NotImplemented)
+
+    @abc.abstractmethod
+    def run(self):
         pass
 
-    def to_str(self):
+    def has_evaluation_parameters(self) -> bool:
+        return len(self.evaluation_set_parameters) > 0
+
+    def has_layers(self) -> bool:
+        return len(self.available_layers) > 0
+
+    def to_str(self) -> str:
         return self.__class__.__name__
 
-    def get_optimization_dict(self) -> Optional[dict]:
-        return {}
-
-    def get_results_dict(self) -> dict:
-        return self.get_optimization_dict()
-
-    def plot_fig(self, fig, title: str, save=True):
+    def plot_fig(self, fig: plt.Figure, title: str, save=True):
         plot_container = PlotContainer(fig=fig, title=title, save=save)
         self.queue.put(plot_container)
 
     def get_save_dir(self) -> str:
-        return self._simoji_save_dir
+        return self.simoji_save_dir
 
-    def load_module(self, module_name: str, package: Optional[str] = None):
-        module = importlib.import_module(module_name, package)
-        module = importlib.reload(module)
+    def callback(self, title: str, message: str):
+        self.queue.put(CallbackContainer(title, message))
 
-        module_cls = getattr(module, module_name)
-        module_obj = module_cls()
+    def get_generic_parameter(self, parameter: Parameter):
+        return self._get_parameter(parameter, self.generic_parameters)
 
-        return module_obj
+    def get_generic_parameter_value(self, parameter: Parameter):
+        return self._get_parameter_value(parameter, self.generic_parameters)
 
+    def get_evaluation_parameter(self, parameter: Parameter):
+        return self._get_parameter(parameter, self.evaluation_set_parameters)
+
+    def get_evaluation_parameter_value(self, parameter: Parameter):
+        return self._get_parameter_value(parameter, self.evaluation_set_parameters)
+
+    def get_layer_parameter(self, parameter: Parameter, layer: Layer) -> Parameter:
+        return self._get_parameter(parameter, layer.parameters)
+
+    def get_layer_parameter_value(self, parameter: Parameter, layer: Layer):
+        return self._get_parameter_value(parameter, layer.parameters)
+
+    @staticmethod
+    def _get_parameter(initial_parameter: Parameter, parameter_list: List[Parameter]):
+        for parameter in parameter_list:
+            if parameter.name == initial_parameter.name:
+                return parameter
+        raise ValueError("Parameter '" + initial_parameter.name + "' not found in parameter_list.")
+
+    def _get_parameter_value(self, initial_parameter: Parameter, parameter_list: List[Parameter]):
+        parameter = self._get_parameter(initial_parameter, parameter_list)
+        if isinstance(parameter, FloatParameter):
+            return parameter.get_current_value()
+        elif isinstance(parameter, NestedParameter):
+            return parameter.get_parameter_values_list()
+        elif isinstance(parameter, SingleParameter):
+            return parameter.value
+        else:
+            raise ValueError("Unknown parameter type" + str(parameter))

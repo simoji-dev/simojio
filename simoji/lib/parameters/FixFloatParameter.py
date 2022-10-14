@@ -1,7 +1,5 @@
 from simoji.lib.parameters.SingleParameter import SingleParameter
-from simoji.lib.enums.ParameterCategory import ParameterCategory
 import numpy as np
-from typing import Optional
 
 
 class FixFloatParameter(SingleParameter):

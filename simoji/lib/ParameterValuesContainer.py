@@ -8,9 +8,7 @@ import copy
 
 
 class ParameterValuesContainer:
-    """
-    Contains the current values of all parameters that have occurred while running this setting.
-    """
+    """Contains the current values of all parameters that have occurred while running this module configuration."""
 
     def __init__(self, category: ParameterCategory):
 

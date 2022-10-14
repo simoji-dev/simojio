@@ -1,7 +1,7 @@
 import PySide2.QtWidgets as QtWidgets
 import PySide2.QtGui as QtGui
 from PySide2.QtCore import Signal
-from simoji.lib.Layer import Layer
+from simoji.lib.CompleteLayer import CompleteLayer
 from simoji.lib.BasicFunctions import *
 
 
@@ -9,7 +9,7 @@ class LayerHeaderWidget(QtWidgets.QGroupBox):
 
     minimize_sig = Signal(QtWidgets.QGroupBox)
 
-    def __init__(self, layer: Layer):
+    def __init__(self, layer: CompleteLayer):
 
         super().__init__()
 

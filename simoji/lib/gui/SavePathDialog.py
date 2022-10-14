@@ -1,3 +1,6 @@
+import PySide2.QtGui as QtGui
+import PySide2.QtCore as QtCore
+
 from simoji.lib.BasicFunctions import *
 from simoji.lib.gui.Dialogs import *
 from simoji.lib.gui.decoration.QHLine import QHLine
@@ -12,8 +15,7 @@ class SavePathDialog(QtWidgets.QDialog):
         self.setWindowTitle("Select save path!")
         self.setMinimumWidth(400)
 
-        self.root_save_path = "SimulationResults"
-        self.root_save_path = os.path.abspath(self.root_save_path)
+        self.root_save_path = os.path.abspath("SimulationResults")
         if not os.path.exists(self.root_save_path):
             self.root_save_path = os.getcwd()
 
@@ -50,6 +52,11 @@ class SavePathDialog(QtWidgets.QDialog):
         self.execution_mode_checkbox.setChecked(True)
         self.execution_mode_checkbox.toggled.connect(self._update_current_dir_name)
         self.execution_mode_key = "execution_mode"
+
+        # zip results
+        self.zip_results_checkbox = QtWidgets.QCheckBox("zip results")
+        self.zip_results_checkbox.setChecked(True)
+        self.zip_results_key = "zip_results"
 
         # suffix
         suffix_label = QtWidgets.QLabel("Suffix:")
@@ -91,6 +98,7 @@ class SavePathDialog(QtWidgets.QDialog):
         self.layout.addWidget(self.time_stamp_checkbox)
         self.layout.addWidget(self.module_name_checkbox)
         self.layout.addWidget(self.execution_mode_checkbox)
+        self.layout.addWidget(self.zip_results_checkbox)
         self.layout.addLayout(suffix_layout)
         self.layout.addLayout(file_format_layout)
         self.layout.addWidget(QHLine())
@@ -116,15 +124,27 @@ class SavePathDialog(QtWidgets.QDialog):
             self.root_save_path = path
             self.root_path_edit.setText(self.root_save_path)
 
+    def set_root_path(self, path: str):
+        if os.path.exists(path) and os.path.isdir(path):
+            self.root_path_edit.setText(path)
+            self.root_save_path = path
+        elif os.path.exists(self.root_save_path) and os.path.isdir(self.root_save_path):
+            self.root_path_edit.setText(self.root_save_path)
+        else:
+            self.root_save_path = os.getcwd()
+            self.root_path_edit.setText(self.root_save_path)
+
     def get_current_save_path(self) -> str:
+        self.set_root_path(self.root_save_path)
         root_path = self.root_path_edit.text()
-        if not os.path.isdir(root_path):
-            raise ValueError("Root path doesn't exist: " + root_path)
 
         return os.path.join(root_path, self._get_current_dir_name(time_stamp_dummy=False))
 
     def get_file_format(self) -> SaveDataFileFormats:
         return SaveDataFileFormats(self.file_format_combo.currentText())
+
+    def get_zip_results(self) -> bool:
+        return self.zip_results_checkbox.isChecked()
 
     def get_preferences(self):
         preferences_dict = {
@@ -132,6 +152,7 @@ class SavePathDialog(QtWidgets.QDialog):
             self.time_stamp_key: self.time_stamp_checkbox.isChecked(),
             self.module_name_key: self.module_name_checkbox.isChecked(),
             self.execution_mode_key: self.execution_mode_checkbox.isChecked(),
+            self.zip_results_key: self.get_zip_results(),
             self.suffix_key: self.suffix_edit.text(),
             self.file_format_key: self.file_format_combo.currentText()
         }
@@ -139,12 +160,11 @@ class SavePathDialog(QtWidgets.QDialog):
 
     def set_preferences(self, preferences_dict: dict):
         try:
-            self.root_path_edit.setText(preferences_dict[self.root_path_key])
-            self.root_save_path = preferences_dict[self.root_path_key]
+            self.set_root_path(preferences_dict[self.root_path_key])
         except:
             pass
         try:
-            self.time_stamp_checkbox.setChecked(bool(preferences_dict[self.time_stamp_key]))  # todo: bools don't work
+            self.time_stamp_checkbox.setChecked(bool(preferences_dict[self.time_stamp_key]))
         except:
             pass
         try:
@@ -153,6 +173,10 @@ class SavePathDialog(QtWidgets.QDialog):
             pass
         try:
             self.execution_mode_checkbox.setChecked(bool(preferences_dict[self.execution_mode_key]))
+        except:
+            pass
+        try:
+            self.zip_results_checkbox.setChecked(preferences_dict[self.zip_results_key])
         except:
             pass
         try:
@@ -193,7 +217,10 @@ class SavePathDialog(QtWidgets.QDialog):
 
     def _update_current_dir_name(self):
         current_name = self._get_current_dir_name()
-        self.current_dir_str.setText("-> root_path" + os.path.sep + current_name)
+        zip_str = ""
+        if self.get_zip_results():
+            zip_str = ".zip"
+        self.current_dir_str.setText("-> root_path" + os.path.sep + current_name + zip_str)
 
         self.sizeHint().width()
         self.resize(QtCore.QSize(self.sizeHint().width(), self.sizeHint().height()))

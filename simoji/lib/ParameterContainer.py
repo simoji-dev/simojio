@@ -1,4 +1,3 @@
-from typing import Union, List
 from simoji.lib.enums.ParameterCategory import ParameterCategory
 from simoji.lib.enums.LayerType import LayerType
 from simoji.lib.parameters import *
@@ -63,14 +62,12 @@ class ParameterContainer:
     def set_module(self, module):
 
         self._current_module = copy.deepcopy(module)
-        module_dict = {}
-        try:
-            module_dict = self._current_module.module_parameters.get_parameters(self._category)
-        except:
-            pass
 
-        for par_name in module_dict:
-            new_par = copy.deepcopy(module_dict[par_name])
+        parameter_list = self._get_module_parameters()
+
+        for parameter in parameter_list:
+            new_par = copy.deepcopy(parameter)
+            par_name = parameter.name
 
             if par_name in self._parameter_objects_dict:
                 previous_par = self._parameter_objects_dict[par_name]
@@ -103,25 +100,20 @@ class ParameterContainer:
     def get_module_parameters(self) -> List[Union[SingleParameter, NestedParameter]]:
         """Get parameter objects that belong to the current module"""
 
-        default_module_parameters = {}
-        try:
-            default_module_parameters = self._current_module.module_parameters.get_parameters(self._category)
-        except:
-            pass
+        default_module_parameters = self._get_module_parameters()
 
         current_parameters = []
-        for parameter_name in default_module_parameters:
-            if parameter_name in self._parameter_objects_dict:
-                current_parameters.append(self._parameter_objects_dict[parameter_name])
+        for parameter in default_module_parameters:
+            if parameter.name in self._parameter_objects_dict:
+                current_parameters.append(self._parameter_objects_dict[parameter.name])
             else:
-                current_parameters.append(default_module_parameters[parameter_name])
+                current_parameters.append(parameter)
         return current_parameters
 
-    def get_module_values(self, var_and_epxr_values_dict: Optional[dict]=None, replace_free_parameters=True):
+    def get_module_values(self, var_and_epxr_values_dict: Optional[dict]=None, replace_free_parameters=True) -> dict:
         """
-
         :param var_and_epxr_values_dict: {name: value} has to be given if replace_free_parameters is True
-        :return:
+        :return: module_values
         """
 
         module_values = {}
@@ -191,3 +183,18 @@ class ParameterContainer:
             content_dict.update({parameter_name: content})
 
         return content_dict
+
+    def _get_module_parameters(self) -> List[Parameter]:
+        parameter_list = []
+        if self._current_module is not None:
+            if self._category is ParameterCategory.GENERIC:
+                parameter_list = self._current_module.generic_parameters
+            elif self._category is ParameterCategory.EVALUATION_SET:
+                parameter_list = self._current_module.evaluation_set_parameters
+            else:
+                layer_types_of_module = [layer.layer_type for layer in self._current_module.available_layers]
+                if self._category in layer_types_of_module:
+                    layer_type_idx = layer_types_of_module.index(self._category)
+                    parameter_list = self._current_module.available_layers[layer_type_idx].parameters
+        return parameter_list
+

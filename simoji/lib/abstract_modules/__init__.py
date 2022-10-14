@@ -1,4 +1,5 @@
 from .AbstractModule import AbstractModule
-from .Simulator import Simulator
-from .Reader import Reader
+
+from .Plotter import Plotter
+from .Calculator import Calculator
 from .Fitter import Fitter

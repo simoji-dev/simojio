@@ -60,8 +60,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.959798"
-     inkscape:cx="-109.19674"
-     inkscape:cy="7.8768118"
+     inkscape:cx="80.302118"
+     inkscape:cy="3.4898816"
      inkscape:document-units="mm"
      inkscape:current-layer="g829"
      showgrid="false"
@@ -70,8 +70,8 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      inkscape:window-width="1920"
-     inkscape:window-height="1145"
-     inkscape:window-x="0"
+     inkscape:window-height="1172"
+     inkscape:window-x="1920"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
@@ -101,19 +101,22 @@
     <g
        id="g829"
        transform="matrix(0.77257257,0.77257257,-0.77257257,0.77257257,84.335218,55.790439)">
-      <circle
-         style="opacity:1;fill:#0b890d;fill-opacity:0.7647059;stroke-width:1.05543184"
-         id="path826"
-         cx="-110.95284"
-         cy="58.76461"
-         transform="rotate(-45)"
-         r="6.0169363" />
-      <path
-         style="fill:none;stroke:#ffffff;stroke-width:1.68671882;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3.70000005;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
-         d="m -39.436086,122.8336 3.606469,-0.11275 -0.112703,-6.59307"
-         id="path828"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccc" />
+      <g
+         id="g842"
+         transform="translate(0.18926678,0.18926952)">
+        <path
+           sodipodi:nodetypes="ccccccccc"
+           inkscape:connector-curvature="0"
+           id="path825"
+           d="m -37.178406,131.884 12.151404,-12.1514 -4.424738,-4.42474 -2.338114,2.33812 2.565267,2.56527 -7.475169,7.47517 -2.565272,-2.56528 -2.338114,2.33812 z"
+           style="fill:#0b890d;fill-opacity:0.76470588;stroke:#000000;stroke-width:0.24216323px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           sodipodi:nodetypes="cccccccc"
+           inkscape:connector-curvature="0"
+           id="path827"
+           d="m -44.288091,115.03684 2.413918,-2.41392 5.232456,5.23245 2.576841,-2.57684 -0.945011,6.62259 -6.622592,0.94501 2.57684,-2.57684 z"
+           style="fill:#0b890d;fill-opacity:0.76470588;stroke:#000000;stroke-width:0.24216323px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      </g>
     </g>
   </g>
 </svg>

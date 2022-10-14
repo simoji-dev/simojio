@@ -1,8 +1,6 @@
 from simoji.lib.parameters.MultiStringParameter import MultiStringParameter
-from simoji.lib.enums.ParameterCategory import ParameterCategory
 
 import os
-from typing import Optional
 
 
 class FileFromPathParameter(MultiStringParameter):

@@ -1,67 +1,38 @@
 # PySide2 stuff
 import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
 import PySide2.QtGui as QtGui
+import PySide2.QtCore as QtCore
 from PySide2.QtCore import Signal
-# from anytree import AnyNode
-
-# Pyplot stuff
 import matplotlib
-matplotlib.use("Qt5Agg")
-
-import os
-from typing import List
 
 from .TabPlotWindow import TabPlotWindow
-from simoji.lib.enums.ExecutionMode import ExecutionMode
 from simoji.lib.OptimizationResultsContainer import OptimizationResultsContainer
 from simoji.lib.VariationResultsContainer import VariationResultsContainer
 from simoji.lib.PlotContainer import PlotContainer
 from simoji.lib.BasicFunctions import *
-from simoji.lib.abstract_modules import *
-from simoji.lib.BasicFunctions import flatten
 from simoji.lib.plotter.SaveDataFileFormats import SaveDataFileFormats
 from simoji.lib.MyNode import MyNode
+from simoji.lib.module_executor.LeaveNode import LeaveNode
+import simoji.lib.BasicFunctions as BasicFunctions
+
+matplotlib.use("Qt5Agg")        # Setting the back-end of the plotting library, use Qt5 since it is used for GUI
 
 
 class MainPlotWindow(QtWidgets.QMainWindow):
     """
     Window that shows the plots and numerical results created during a module run of simoji. The plots are sorted into
-    different tabs to related them to a specific sample and (if given) data set.
-
-    Depending on the module type and whether the "coupled" mode is selected there are 3 different ways how the tabs are
-    organized. There are at maximum two tab hierarchy steps which are called "Major tabs" and "Sub tabs" in the following:
-
-    1) Module type "Simulator":
-    - Major tabs: Samples
-    - Sub tabs: No (no data sets defined for Simulators by definition)
-
-    2) Module types "DataSetReader", "Fitter" and de-coupled evaluation:
-    - Major tabs: Samples
-    - Sub tabs: Data sets
-
-    3) Module types "DataSetReader", "Fitter" and coupled evaluation:
-    - Major tabs: Data sets
-    - Sub tabs: Samples
-
-    Furthermore, it depends on the execution mode how the single plots are handled if the module is repeatedly executed:
-
-    a) Variation mode:
-        - Plots of each step are shown separately (variation step in plot title)
-        (- Optional: Combine data of variation steps in one plot (works only for 1d and difficult to label))
-
-    b) Optimization mode: Show only plots of current step.
-
+    different tabs to relate them to a specific sample, variation set, and/or evaluation set.
     """
 
-    closed_sig = Signal()  # emitted when window closed
+    closed_sig = Signal()
+    save_results_sig = Signal()
 
     def __init__(self):
         super().__init__()
 
         self.plot_every_steps_list = None
         self.plot_every_steps = 1
-        self.setWindowTitle("simoji results window")
+        self.setWindowTitle("simoji plot window")
 
         # -- set simoji icon in window --
         simoji_icon = QtGui.QIcon(icon_path('simoji_logo.svg'))
@@ -71,9 +42,57 @@ class MainPlotWindow(QtWidgets.QMainWindow):
         tray = QtWidgets.QSystemTrayIcon(simoji_icon, self)
         tray.show()
 
-        self.reset()
+        # toolbar
+        spacer = QtWidgets.QWidget()
+        layout = QtWidgets.QHBoxLayout()
+        layout.addStretch(1)
+        spacer.setLayout(layout)
 
-        self.input_tree = None
+        self.saveButton = QtWidgets.QToolButton()
+        self.saveButton.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+        self.saveAction = QtWidgets.QAction()
+        self.saveAction.setIcon(QtGui.QIcon(BasicFunctions.icon_path('save_tick.svg')))
+        self.saveAction.setText('Save results')
+        self.saveAction.setShortcut(QtGui.QKeySequence('Ctrl+S'))
+        self.saveAction.setToolTip('save results (Ctrl+S)')
+        self.saveAction.triggered.connect(self.save_btn_clicked)
+        self.saveButton.setDefaultAction(self.saveAction)
+
+        self.toolbar = QtWidgets.QToolBar(self)
+        self.toolbar.setObjectName("ToolbarResultsWindow")
+        self.toolbar.setMovable(False)
+
+        self.toolbar.addWidget(spacer)
+        self.toolbar.addWidget(self.saveButton)
+
+        self.major_tab_widget = QtWidgets.QTabWidget()
+        self.major_tab_widget.setObjectName("Plot tab widget")
+        self.setCentralWidget(self.major_tab_widget)
+        self.sub_tab_widget_list = []  # list containing the sub QTabWidgets (one for each major tab)
+
+        self.addToolBar(QtCore.Qt.BottomToolBarArea, self.toolbar)
+
+        self.root_save_path = None
+        self.save_path_list = []
+        self.update_plots = True  # False, if execution-mode = variation
+        self.is_coupled_evaluation = False  # If True: Evaluation sets as major tabs
+
+        self.evaluation_set_prefix = "evaluation_set_"
+
+        self.sample_names = []
+
+        # store allocation of sample-index and evaluation-set-index to plot-window in a nested dictionary
+        # {sample_1: {evaluation_set_1: widget, evaluation_set_2: widget}} -> 1st index sample, 2nd index evaluation set
+        self.sample_evaluation_set_widget_dict = {}
+        self.plot_window_list = []
+        self.nested_tab_name_list = []
+
+        self.leave_nodes = []
+
+        self.tab_window_dict = {}
+
+        self.id_counter = 0
+        self.tab_window_dict = dict()   # {id: tab_window}
 
     def reset(self):
 
@@ -82,28 +101,24 @@ class MainPlotWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.major_tab_widget)
         self.sub_tab_widget_list = []       # list containing the sub QTabWidgets (one for each major tab)
 
+        self.addToolBar(QtCore.Qt.BottomToolBarArea, self.toolbar)
+
         self.root_save_path = None
         self.save_path_list = []
         self.update_plots = True            # False, if execution-mode = variation
-        self.is_simulator_module = True     # If True: No sub-tabs for data sets
-        self.is_coupled_evaluation = False  # If True: Data sets as major tabs (if not _is_simulator_module)
-        self.is_simulator_module = True
-
-        self.dataset_prefix = "data_set_"
+        self.is_coupled_evaluation = False  # If True: Evaluation sets as major tabs
 
         self.sample_names = []              # if the coupled mode is used: additional sample name 'global'
 
-        # store allocation of sample-index and data-set-index to plot-window in a nested dictionary
-        # {sample_1: {dataset_1: widget, dataset_2: widget}}    -> 1st index sampled, 2nd index data set
-        self.sample_dataset_widget_dict = {}
+        # store allocation of sample-index and evaluation-set-index to plot-window in a nested dictionary
+        # {sample_1: {evaluation_set_1: widget, evaluation_set_2: widget}} -> 1st index sample, 2nd index evaluation set
+        self.sample_evaluation_set_widget_dict = {}
         self.plot_window_list = []
         self.nested_tab_name_list = []
 
         self.leave_nodes = []
 
-    def configure(self, save_path: str, plot_every_steps_list: List[int]):
-        self.root_save_path = save_path
-        self.plot_every_steps_list = plot_every_steps_list
+        self.tab_window_dict = {}
 
     def initialize_tabs(self, root: MyNode):
 
@@ -113,7 +128,9 @@ class MainPlotWindow(QtWidgets.QMainWindow):
                 os.makedirs(save_path_sub, exist_ok=True)
                 if sub_node.is_leaf:
                     tab_window = TabPlotWindow()
-                    sub_node.tab_window = tab_window
+                    self.tab_window_dict.update({self.id_counter: tab_window})
+                    sub_node.tab_window_id = self.id_counter
+                    self.id_counter += 1
                     sub_node.save_path = save_path_sub
                     self.leave_nodes.append(sub_node)
                     parent_tab_widget.addTab(tab_window, sub_node.name)
@@ -141,21 +158,24 @@ class MainPlotWindow(QtWidgets.QMainWindow):
         return total_save_path_list
 
     def process_result(self, result: Union[PlotContainer, OptimizationResultsContainer, VariationResultsContainer],
-                       node: MyNode):
+                       node: LeaveNode):
+
+        tab_window = self.tab_window_dict[node.tab_window_id]
 
         if isinstance(result, PlotContainer):
-            node.tab_window.plot(result.fig, result.title, result.save)
+            tab_window.plot(result.fig, result.title, result.save)
         elif isinstance(result, OptimizationResultsContainer):
-            node.tab_window.add_optimization_results(result)
+            tab_window.add_optimization_results(result)
         elif isinstance(result, VariationResultsContainer):
-            node.tab_window.update_variation_results(result)
+            tab_window.update_variation_results(result)
         else:
             raise ValueError("Unknown result type:", result)
 
     def save_all(self, save_file_format: SaveDataFileFormats):
 
         for leave_node in self.leave_nodes:
-            leave_node.tab_window.save(leave_node.save_path, save_file_format)
+            tab_window = self.tab_window_dict[leave_node.tab_window_id]
+            tab_window.save(leave_node.save_path, save_file_format)
 
     def closeEvent(self, event):
         """Overwrite method of QMainWindow class"""
@@ -167,3 +187,12 @@ class MainPlotWindow(QtWidgets.QMainWindow):
             pass
 
         self.closed_sig.emit()
+
+    def save_btn_clicked(self):
+        self.save_results_sig.emit()
+
+    def set_save_icon(self, saved: bool):
+        if saved:
+            self.saveButton.setIcon(QtGui.QIcon(BasicFunctions.icon_path('save_tick_saved.svg')))
+        else:
+            self.saveButton.setIcon(QtGui.QIcon(BasicFunctions.icon_path('save_tick_unsaved.svg')))

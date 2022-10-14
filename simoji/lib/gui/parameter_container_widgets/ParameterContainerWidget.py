@@ -1,6 +1,5 @@
 import PySide2.QtWidgets as QtWidgets
 import PySide2.QtCore as QtCore
-import PySide2.QtGui as QtGui
 
 from PySide2.QtCore import Signal
 
@@ -16,7 +15,7 @@ from typing import Union, Callable
 
 class ParameterContainerWidget(QtWidgets.QGroupBox):
     """
-    Contains widgets of parameters that are store in a parameter container. Shows only the widgets that belong to
+    Contains widgets of parameters that are stored in a parameter container. Shows only the widgets that belong to
     current module.
     """
 
@@ -59,7 +58,6 @@ class ParameterContainerWidget(QtWidgets.QGroupBox):
 
         if self.is_module_dependent:
             self.parameter_container.set_module(self.current_module)    # should also work if current_module=None
-
             for parameter_object in self.parameter_container.get_module_parameters():
                 self._add_widget(parameter_object, is_deletable=False)
         else:

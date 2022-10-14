@@ -1,4 +1,5 @@
 import PySide2.QtWidgets as QtWidgets
+from typing import Union, Callable
 
 from simoji.lib.gui.parameter_container_widgets.ParameterContainerWidget import ParameterContainerWidget
 
@@ -6,8 +7,6 @@ from simoji.lib.ParameterContainer import ParameterContainer
 from simoji.lib.parameters.SingleParameter import SingleParameter
 from simoji.lib.parameters.NestedParameter import NestedParameter
 from simoji.lib.parameters.MultivalueParameter import MultivalueParameter
-
-from typing import Union, Callable
 
 
 class ParameterContainerScrollWidget(QtWidgets.QScrollArea):
@@ -36,7 +35,6 @@ class ParameterContainerScrollWidget(QtWidgets.QScrollArea):
 
     def get_parameter_container(self) -> ParameterContainer:
         return self.parameter_container_widget.get_parameter_container()
-
 
 
 

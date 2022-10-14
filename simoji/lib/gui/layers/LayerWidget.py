@@ -1,23 +1,22 @@
 import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
 import PySide2.QtGui as QtGui
 from PySide2.QtCore import Signal
 
-from simoji.lib.Layer import Layer
+from simoji.lib.CompleteLayer import CompleteLayer
 from simoji.lib.enums.LayerType import LayerType
 from simoji.lib.gui.parameter_container_widgets.ParameterContainerWidget import ParameterContainerWidget
 
 
 class LayerWidget(ParameterContainerWidget):
 
-    add_layer_sig = Signal(Layer)
-    rename_layer_sig = Signal(Layer)
-    del_layer_sig = Signal(Layer)
+    add_layer_sig = Signal(CompleteLayer)
+    rename_layer_sig = Signal(CompleteLayer)
+    del_layer_sig = Signal(CompleteLayer)
     set_color_sig = Signal(QtWidgets.QGroupBox)
     collapse_all_sig = Signal()
     remove_all_sig = Signal()
 
-    def __init__(self, layer: Layer):
+    def __init__(self, layer: CompleteLayer):
 
         super().__init__()
 
@@ -78,7 +77,7 @@ class LayerWidget(ParameterContainerWidget):
     def get_color(self) -> tuple:
         return self.layer.color
 
-    def get_layer(self) -> Layer:
+    def get_layer(self) -> CompleteLayer:
         self.layer.set_parameters(self.get_parameter_container().get_all_parameters_content())
         return self.layer
 

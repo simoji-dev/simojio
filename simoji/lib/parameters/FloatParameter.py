@@ -2,10 +2,7 @@ from simoji.lib.parameters.NestedParameter import NestedParameter
 from simoji.lib.parameters.FixFloatParameter import FixFloatParameter
 from simoji.lib.parameters.MultiStringParameter import MultiStringParameter
 from simoji.lib.parameters.BoolParameter import BoolParameter
-from simoji.lib.enums.ParameterCategory import ParameterCategory
 import numpy as np
-
-from typing import Optional
 
 
 class FloatParameter(NestedParameter):
@@ -55,8 +52,14 @@ class FloatParameter(NestedParameter):
         current_values = [parameter.value for parameter in self.parameters]
         return current_values, success
 
+    def set_float_value(self, value: float):
+        self.float_par.value = value
+
     def get_current_value(self):
         if self.is_set_to_free_parameter.value:
             return self.free_par.value
         else:
             return self.float_par.value
+
+    def get_is_set_to_free_parameter(self) -> bool:
+        return self.is_set_to_free_parameter.value

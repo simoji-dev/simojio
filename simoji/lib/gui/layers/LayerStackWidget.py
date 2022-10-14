@@ -2,13 +2,12 @@ import PySide2.QtWidgets as QtWidgets
 import PySide2.QtCore as QtCore
 import PySide2.QtGui as QtGui
 
-from simoji.lib.Layer import Layer
+from simoji.lib.CompleteLayer import CompleteLayer
 from simoji.lib.gui.Dialogs import select_from_combobox
 from simoji.lib.enums.LayerType import LayerType
 from simoji.lib.gui.layers.LayerWidget import LayerWidget
 from simoji.lib.gui.layers.LayerHeaderWidget import LayerHeaderWidget
 
-import numpy as np
 from typing import Callable
 import copy
 
@@ -89,18 +88,18 @@ class LayerStackWidget(QtWidgets.QMainWindow):
 
         if len(layer_list) == 0:
             corrected_layer_list = [
-                Layer(name="top semi", layer_type=LayerType.SEMI, enabled=True,
-                     color=self.layer_type_default_colors[LayerType.SEMI]),
-                Layer(name="bottom semi", layer_type=LayerType.SEMI, enabled=True,
-                      color=self.layer_type_default_colors[LayerType.SEMI])
+                CompleteLayer(name="top semi", layer_type=LayerType.SEMI, enabled=True,
+                              color=self.layer_type_default_colors[LayerType.SEMI]),
+                CompleteLayer(name="bottom semi", layer_type=LayerType.SEMI, enabled=True,
+                              color=self.layer_type_default_colors[LayerType.SEMI])
             ]
         else:
             if layer_list[0].layer_type is not LayerType.SEMI:
-                corrected_layer_list = [Layer(name="top semi", layer_type=LayerType.SEMI, enabled=True,
-                                    color=self.layer_type_default_colors[LayerType.SEMI])] + corrected_layer_list
+                corrected_layer_list = [CompleteLayer(name="top semi", layer_type=LayerType.SEMI, enabled=True,
+                                                      color=self.layer_type_default_colors[LayerType.SEMI])] + corrected_layer_list
             if (layer_list[-1].layer_type is not LayerType.SEMI) or (len(layer_list) == 1):
-                corrected_layer_list.append(Layer(name="bottom semi", layer_type=LayerType.SEMI, enabled=True,
-                                        color=self.layer_type_default_colors[LayerType.SEMI]))
+                corrected_layer_list.append(CompleteLayer(name="bottom semi", layer_type=LayerType.SEMI, enabled=True,
+                                                          color=self.layer_type_default_colors[LayerType.SEMI]))
 
         # add new layers
         for idx, layer in enumerate(corrected_layer_list):
@@ -128,7 +127,7 @@ class LayerStackWidget(QtWidgets.QMainWindow):
                 layers_unsorted.append([self.layerWidget_dockWidget_dict[layer_widget].y(), layer_widget.get_layer()])
 
             for layer_widget in self.layerWidget_dockWidget_dict:
-                if layer_widget.layer.layer_type not in self.current_module.module_parameters.get_categories():
+                if layer_widget.layer.layer_type not in [layer.layer_type for layer in self.current_module.available_layers]:
                     self.layerWidget_dockWidget_dict[layer_widget].hide()
 
         return self.layer_list
@@ -136,15 +135,16 @@ class LayerStackWidget(QtWidgets.QMainWindow):
     def set_module(self, module):
         self.current_module = copy.deepcopy(module)
 
+        available_layer_types = [layer.layer_type for layer in module.available_layers]
         for layer_widget in self.layerWidget_dockWidget_dict:
             layer_widget.set_module(module)
             dockwidget = self.layerWidget_dockWidget_dict[layer_widget]
-            if layer_widget.layer.layer_type in module.module_parameters.get_categories():
+            if layer_widget.layer.layer_type in available_layer_types:
                 dockwidget.show()
             else:
                 dockwidget.hide()
 
-    def add_layer(self, layer: Layer, idx=-1):
+    def add_layer(self, layer: CompleteLayer, idx=-1):
 
         layer_copy = copy.deepcopy(layer)
 
@@ -179,8 +179,8 @@ class LayerStackWidget(QtWidgets.QMainWindow):
 
     def add_layer_clicked(self):
 
-        available_types = [layer_type for layer_type in self.current_module.module_parameters.get_categories()
-                           if (isinstance(layer_type, LayerType) and layer_type is not LayerType.SEMI)]
+        available_types = [layer.layer_type for layer in self.current_module.available_layers
+                           if (isinstance(layer.layer_type, LayerType) and layer.layer_type is not LayerType.SEMI)]
         selected_item, ok = select_from_combobox(parent=self,
                                                  combobox_items=available_types,
                                                  title="Add layer",
@@ -224,13 +224,13 @@ class LayerStackWidget(QtWidgets.QMainWindow):
         for layer_widget in layer_widget_remove:
             del self.layerWidget_dockWidget_dict[layer_widget]
 
-    def get_default_layer(self, layer_type: LayerType) -> Layer:
+    def get_default_layer(self, layer_type: LayerType) -> CompleteLayer:
 
         color = (0, 0, 0, 200)
         if layer_type in self.layer_type_default_colors:
             color = self.layer_type_default_colors[layer_type]
 
-        layer = Layer(name='layer', layer_type=layer_type, enabled=True, color=color)
+        layer = CompleteLayer(name='layer', layer_type=layer_type, enabled=True, color=color)
         layer.set_module(self.current_module)
         return layer
 

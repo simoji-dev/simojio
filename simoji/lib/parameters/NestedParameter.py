@@ -1,8 +1,5 @@
 from simoji.lib.parameters.SingleParameter import SingleParameter
-from simoji.lib.enums.ParameterCategory import ParameterCategory
 from simoji.lib.parameters.Parameter import Parameter
-
-from typing import Optional
 
 
 class NestedParameter(Parameter):

@@ -5,7 +5,6 @@ from simoji.lib.gui.parameter_widgets.ParameterWidget import ParameterWidget
 
 
 class BoolParWidget(ParameterWidget):
-    """Widget that contains single float parameters."""
 
     def __init__(self, parameter: BoolParameter, is_sub_parameter=False):
 

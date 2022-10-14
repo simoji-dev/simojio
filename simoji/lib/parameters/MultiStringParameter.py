@@ -1,6 +1,4 @@
 from simoji.lib.parameters.SingleParameter import SingleParameter
-from simoji.lib.enums.ParameterCategory import ParameterCategory
-from typing import Optional
 
 
 class MultiStringParameter(SingleParameter):

@@ -1,36 +1,28 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
-import PySide2.QtGui as QtGui
-
-# import simoji resources
-from simoji.lib.gui.SampleWidget import SampleWidget
-from simoji.lib.gui.SampleTabWidget import SampleTabWidget
-from simoji.lib.gui.global_side_window.SideWidgetGlobalSettings import SideWidgetGlobalSettings
-from simoji.lib.gui.Dialogs import *
-from simoji.lib.gui.SavePathDialog import SavePathDialog
-from simoji.lib.gui.GeometryAndPreferencesManager import GeometryAndPreferencesManager
-from simoji.lib.gui.CustomCombo import CustomCombo
-
-from simoji.lib.SettingManager import SettingManager
-import simoji.lib.BasicFunctions as BasicFunctions
-from simoji.lib.ModuleLoader import ModuleLoader
-from simoji.lib.ModuleExecutor import ModuleExecutor
-from simoji.lib.ModuleExecutor import ModuleExecutor
-from simoji.lib.ModuleLoader import ModuleLoader
-from simoji.lib.GlobalSettingsContainer import GlobalSettingsContainer
-from simoji.lib.enums.ExecutionMode import ExecutionMode
-from simoji.lib.plotter.MainPlotWindow import MainPlotWindow
-from simoji.lib.Sample import Sample
-from simoji.lib.plotter.SaveDataFileFormats import SaveDataFileFormats
-
-# import further resources
-import sys, os
-import webbrowser
-import datetime
 import shutil
+import sys
 import tempfile
-
+import webbrowser
+import PySide2.QtGui as QtGui
+import PySide2.QtCore as QtCore
 from typing import List
+
+import simoji.lib.BasicFunctions as BasicFunctions
+from simoji.lib.GlobalSettingsContainer import GlobalSettingsContainer
+from simoji.lib.ModuleLoader import ModuleLoader
+from simoji.lib.Sample import Sample
+from simoji.lib.SettingManager import SettingManager
+from simoji.lib.abstract_modules import Calculator, Fitter
+from simoji.lib.enums.ExecutionMode import ExecutionMode
+from simoji.lib.gui.CustomCombo import CustomCombo
+from simoji.lib.gui.Dialogs import *
+from simoji.lib.gui.GeometryAndPreferencesManager import GeometryAndPreferencesManager
+from simoji.lib.gui.SampleTabWidget import SampleTabWidget
+from simoji.lib.gui.SampleWidget import SampleWidget
+from simoji.lib.gui.SavePathDialog import SavePathDialog
+from simoji.lib.gui.global_side_window.SideWidgetGlobalSettings import SideWidgetGlobalSettings
+from simoji.lib.module_executor.ModuleExecutor import ModuleExecutor
+from simoji.lib.plotter.MainPlotWindow import MainPlotWindow
+from simoji.lib.plotter.SaveDataFileFormats import SaveDataFileFormats
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -44,11 +36,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.plot_window = MainPlotWindow()
         self.plot_window.closed_sig.connect(self.show_plot_window_clicked)
+        self.plot_window.save_results_sig.connect(self.save_btn_clicked)
         self.plot_window.hide()
 
         self.module_executor = ModuleExecutor(self.plot_window, self.module_loader)
-        # self.module_executor.execution_stopped_sig.connect(self.module_execution_stopped)
-        # self.module_executor.plot_window_visibility_changed_sig.connect(self.show_plot_window)
 
         self.geometry_manager = GeometryAndPreferencesManager()
         self.plot_window_geometry = None
@@ -65,6 +56,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.module_combo = CustomCombo()
         self.execution_mode_combo = CustomCombo()
         self.global_button = QtWidgets.QPushButton(QtGui.QIcon(BasicFunctions.icon_path('global.svg')), '')
+        self.nb_processes_edit = QtWidgets.QLineEdit()
 
         # -- widgets --
         self.sample_tab_widget = SampleTabWidget()
@@ -74,14 +66,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self.sync_global_parameters_with_values_send_from_side_widget)
         self.dock_widget_global = QtWidgets.QDockWidget(self)
         self.dock_widget_global.setObjectName("Side dock widget")
-        self.save_path_dialog = SavePathDialog(self)
+        self.save_path_dialog = SavePathDialog()
 
         # -- actions --
         self.runAction = QtWidgets.QAction(QtGui.QIcon(BasicFunctions.icon_path('run.svg')), 'Run', self)
-        self.saveAction = QtWidgets.QAction(QtGui.QIcon(BasicFunctions.icon_path('save_tick.svg')), 'Save results',
-                                            self)
+        # self.saveButton = QtWidgets.QAction(QtGui.QIcon(BasicFunctions.icon_path('save_tick.svg')), 'Save results',
+        #                                     self)
         self.tabifyAction = QtWidgets.QAction("tabify parameter widgets")
-        self.showPlotWindowAction = QtWidgets.QAction("show results window")
+        self.showPlotWindowAction = QtWidgets.QAction("show plot window")
 
         self.init_ui()
         self.load_setting(setting_path)
@@ -89,6 +81,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.temp_dir = None
         self.running = False
+        self.start_time = 0.
 
     def init_ui(self):
 
@@ -121,10 +114,6 @@ class MainWindow(QtWidgets.QMainWindow):
         stopAction.setToolTip('stop')
         stopAction.triggered.connect(self.stop_btn_clicked)
 
-        self.saveAction.setShortcut(QtGui.QKeySequence('Ctrl+S'))
-        self.saveAction.setToolTip('save results (Ctrl+S)')
-        self.saveAction.triggered.connect(self.save_btn_clicked)
-
         # -- module combo, execution mode combo --
         self.module_combo.activated[str].connect(self.module_combo_on_activated)
         self.populate_module_combo()
@@ -138,6 +127,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.global_button.setToolTip("Use global optimization settings")
         self.global_button.clicked.connect(self.global_button_clicked)
 
+        # -- Line edit number of processes --
+        nb_processes_label = "processes:"
+        nb_processes_label_widget = QtWidgets.QLabel(nb_processes_label)
+        positive_int_validator = QtGui.QIntValidator()
+        positive_int_validator.setBottom(1)
+        self.nb_processes_edit.setValidator(positive_int_validator)
+        self.nb_processes_edit.setFixedWidth(30)
+        nb_physical_cores = self.module_executor.process_manager.get_nb_physical_cores()
+        self.nb_processes_edit.setToolTip(
+            "Number of parallel executed processes. Available physical cores: " + str(nb_physical_cores))
+        self.nb_processes_edit.setText(str(nb_physical_cores))
+
         spacer = QtWidgets.QWidget()
         layout = QtWidgets.QHBoxLayout()
         layout.addStretch(1)
@@ -148,11 +149,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.toolbar.addAction(self.runAction)
         self.toolbar.addAction(stopAction)
         self.toolbar.addSeparator()
-        self.toolbar.addAction(self.saveAction)
         self.toolbar.addWidget(self.module_combo)
         self.toolbar.addSeparator()
         self.toolbar.addWidget(self.execution_mode_combo)
         self.toolbar.addWidget(self.global_button)
+        self.toolbar.addWidget(spacer)
+        self.toolbar.addWidget(nb_processes_label_widget)
+        self.toolbar.addWidget(self.nb_processes_edit)
 
     def init_menu_bar(self):
 
@@ -182,13 +185,6 @@ class MainWindow(QtWidgets.QMainWindow):
         SaveSettingAct.triggered.connect(self.save_setting_clicked)
         expMenu.addAction(SaveSettingAct)
 
-        # settingsAct = QtWidgets.QAction(QtGui.QIcon(resource_path('settings.svg')), 'Options', self)
-        # settingsAct.triggered.connect(self.open_simoji_settings)
-        # #
-        # self.showTracebackAct = QtWidgets.QAction('Show traceback', self)
-        # self.showTracebackAct.triggered.connect(self.show_traceback_window)
-        # self.show_traceback_bool = False
-
         exitAction = QtWidgets.QAction(QtGui.QIcon(BasicFunctions.icon_path('exit.svg')), 'Exit', self)
         exitAction.setShortcut(QtGui.QKeySequence('Ctrl+Q'))
         exitAction.triggered.connect(self.closeEvent)
@@ -197,9 +193,6 @@ class MainWindow(QtWidgets.QMainWindow):
         fileMenu.addMenu(impMenu)
         fileMenu.addMenu(expMenu)
         fileMenu.addSeparator()
-        # fileMenu.addAction(settingsAct)
-        # fileMenu.addAction(self.showTracebackAct)
-        # fileMenu.addSeparator()
         fileMenu.addAction(exitAction)
 
         # -- View menu --
@@ -323,23 +316,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.module_combo_on_activated()    # set the current module
 
         global_settings, sample_list = self.get_current_setting()
-        self.module_executor = ModuleExecutor(self.plot_window, self.module_loader)
+        nb_parallel_processes = int(self.nb_processes_edit.text())
+        self.module_executor = ModuleExecutor(self.plot_window, self.module_loader, nb_parallel_processes)
         self.module_executor.configure(global_settings, sample_list, self.temp_dir.name)
         self.module_executor.execution_stopped_sig.connect(self.module_execution_stopped)
         self.module_executor.plot_window_visibility_changed_sig.connect(self.show_plot_window)
 
         self.module_executor.run()
 
-        # self.module_executor.terminate_execution(emit_stop_signal=False)
-        #
-        # self.module_executor = ModuleExecutor(self.plot_window, self.module_loader)
-        # self.module_executor.execution_stopped_sig.connect(self.module_execution_stopped)
-        # self.module_executor.plot_window_visibility_changed_sig.connect(self.show_plot_window)
-        #
-        # self.module_executor.configure(global_settings, sample_list, self.temp_dir.name)
-        # self.module_executor.run()
-
-        self.saveAction.setIcon(QtGui.QIcon(BasicFunctions.icon_path('save_tick_unsaved.svg')))
+        self.plot_window.set_save_icon(saved=False)
         self.running = True
 
     def stop_btn_clicked(self):
@@ -348,19 +333,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def save_btn_clicked(self):
 
-        save_path, save_file_format, ok = self.save_dialog()
+        save_path, save_file_format, zip_results, ok = self.save_dialog()
 
         if ok:
             global_settings, sample_list = self.get_current_setting()
-            self.save_results(global_settings, sample_list, save_path, save_file_format, self.app)
-
-            if self.running:
-                self.saveAction.setIcon(QtGui.QIcon(BasicFunctions.icon_path('save_tick_unsaved.svg')))
-            else:
-                self.saveAction.setIcon(QtGui.QIcon(BasicFunctions.icon_path('save_tick_saved.svg')))
+            self.save_results(global_settings, sample_list, save_path, save_file_format, zip_results, self.app)
+            self.plot_window.set_save_icon(saved=True)
 
     def save_results(self, global_settings: GlobalSettingsContainer, sample_list: List[Sample],
-                     save_path: str, save_file_format: SaveDataFileFormats, app: QtWidgets.QApplication):
+                     save_path: str, save_file_format: SaveDataFileFormats, zip_results: bool,
+                     app: QtWidgets.QApplication):
 
         self.plot_window.save_file_format = save_file_format
         self.plot_window.save_all(save_file_format)
@@ -376,6 +358,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # write readme
         self._write_readme(save_path, app, global_settings)
+
+        if zip_results:
+            shutil.make_archive(save_path, 'zip', save_path)
+            shutil.rmtree(save_path)
 
     def _write_readme(self, save_path: str, app: QtWidgets.QApplication, global_settings: GlobalSettingsContainer):
         """Write README file with basic information about the origin of the results and the folder content."""
@@ -396,7 +382,7 @@ class MainWindow(QtWidgets.QMainWindow):
         readme_file.write(description_str)
         readme_file.close()
 
-    def save_dialog(self) -> (str, str, bool):
+    def save_dialog(self) -> (str, str, bool, bool):
         """
         Execute save path dialog.
         :return: save_path, save_file_format, ok-bool
@@ -407,11 +393,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
         save_path = None
         save_file_format = None
+        zip_results = True
         ok = False
 
         if self.save_path_dialog.exec_():  # ok clicked
             save_path = self.save_path_dialog.get_current_save_path()
             save_file_format = self.save_path_dialog.get_file_format()
+            zip_results = self.save_path_dialog.get_zip_results()
 
             if os.path.exists(save_path):
                 ok = warning(self, "Save path already exists. Overwrite?")
@@ -420,7 +408,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 ok = True
 
-        return save_path, save_file_format, ok
+        return save_path, save_file_format, zip_results, ok
 
     def module_execution_stopped(self):
         self.runAction.setEnabled(True)
@@ -441,16 +429,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if reply == QtWidgets.QMessageBox.Yes:
 
+            # -- save gui and settings --
             self.save_gui_geometry()
             self.store_preferences()
-
-            # -- save results path --
-            # self.settings.setValue("results_dir", self.tabs_widget.main_tab.get_save_file_path())
-
-            # -- save current setting as 'latest_setting.json' --
             self.save_setting(self.default_setting_save_path)
 
             # -- quit the app --
+            self.module_executor.terminate_execution()
             self.app.quit()
             sys.exit()
         else:
@@ -478,7 +463,6 @@ class MainWindow(QtWidgets.QMainWindow):
         global_settings.module_path = self.module_loader.get_module_path_as_list(self.module_combo.currentText())
         global_settings.execution_mode = ExecutionMode(self.execution_mode_combo.currentText())
         global_settings.use_global_optimization_settings = self._is_global_optimization_settings_enabled
-        # global_settings.do_coupled_optimization = self._is_coupled_optimization_enabled
 
         global_settings.set_variables_parameter_container(
             self.side_widget_global_settings.get_global_variables_container())
@@ -507,10 +491,7 @@ class MainWindow(QtWidgets.QMainWindow):
         optimization_indices = [self.execution_mode_combo.findText(ExecutionMode(item)) for item in
                                 [ExecutionMode.OPTIMIZATION, ExecutionMode.COUPLED_OPTIMIZATION]]
 
-        try:
-            enable_optimization_mode = (len(module.get_optimization_dict()) > 0)
-        except:
-            enable_optimization_mode = False
+        enable_optimization_mode = isinstance(module, Calculator) or isinstance(module, Fitter)
 
         for optimization_idx in optimization_indices:
             self.execution_mode_combo.model().item(optimization_idx).setEnabled(enable_optimization_mode)
@@ -522,6 +503,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.execution_mode_combo_on_activated()
 
         self.sample_tab_widget.set_module(module)
+        self.side_widget_global_settings.set_module(module)
 
     def execution_mode_combo_on_activated(self):
         self.execution_mode = ExecutionMode(self.execution_mode_combo.currentText())
@@ -531,9 +513,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self._enable_global_optimization_settings(True)
 
     def get_current_module(self):
-        # module_path = self.module_loader.get_module_path_as_list(self.module_combo.currentText())
-        # module_cls = BasicFunctions.get_module_class_from_path_given_as_list(module_path)
-        # return module_cls()
         return self.module_loader.load_module(self.module_combo.currentText())
 
     def global_button_clicked(self):
@@ -561,10 +540,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def show_plot_window_clicked(self):
         show = not self.plot_window.isVisible() #self.module_executor.is_plot_window_visible()
-        # self.module_executor.show_plot_window(show)
         self.show_plot_window(show)
 
-    def open_wiki(self):
+    @staticmethod
+    def open_wiki():
         webbrowser.open_new_tab("https://git.iap.phy.tu-dresden.de/simoji-dev/simoji/-/wikis/simoji")
 
     def _enable_global_optimization_settings(self, enable: bool):

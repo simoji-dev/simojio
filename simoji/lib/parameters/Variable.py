@@ -1,5 +1,4 @@
 from simoji.lib.parameters.NestedParameter import NestedParameter
-from simoji.lib.enums.ParameterCategory import ParameterCategory
 from simoji.lib.parameters.FixFloatParameter import FixFloatParameter
 from simoji.lib.parameters.BoolParameter import BoolParameter
 

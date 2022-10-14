@@ -1,8 +1,6 @@
 from simoji.lib.parameters.SingleParameter import SingleParameter
-from simoji.lib.enums.ParameterCategory import ParameterCategory
 from simoji.lib.parameters.Parameter import Parameter
 import copy
-from typing import Optional
 
 
 class MultivalueParameter(Parameter):

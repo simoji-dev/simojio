@@ -1,9 +1,6 @@
 import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
 import PySide2.QtGui as QtGui
 from simoji.lib.OptimizationResultsContainer import OptimizationResultsContainer
-import os
-import json
 from simoji.lib.BasicFunctions import *
 
 
@@ -18,6 +15,9 @@ class OptimizationResultsWidget(QtWidgets.QWidget):
         self.optimization_results_container = optimization_results_container
 
         self.basic_optimization_results_widget = None
+        self.basic_optimization_results_header_list = []
+        self.complete_optimization_results_widget = None
+        self.complete_optimization_results_header_list = []
 
         self.add_optimization_results_widget(optimization_results_container)
 
@@ -29,11 +29,6 @@ class OptimizationResultsWidget(QtWidgets.QWidget):
         :param optimization_results_container
         :return:
         """
-
-        # # -- create new dock widget --
-        # dockWidget = QtWidgets.QDockWidget(self)
-        # dockWidget.setFeatures(QtWidgets.QDockWidget.AllDockWidgetFeatures)
-        # dockWidget.setWindowTitle("Optimization results")
 
         # -- create tab widget as container for multiple tables --
         tab_widget = QtWidgets.QTabWidget()

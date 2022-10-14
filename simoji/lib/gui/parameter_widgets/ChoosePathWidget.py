@@ -1,4 +1,3 @@
-import PySide2.QtWidgets as QtWidgets
 import PySide2.QtGui as QtGui
 
 from simoji.lib.gui.parameter_widgets.ParameterWidget import ParameterWidget

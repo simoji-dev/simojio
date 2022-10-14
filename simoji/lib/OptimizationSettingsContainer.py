@@ -1,6 +1,5 @@
 
-class OptimizationSettingsContainer():
-    """Contains optimization mode settings of simoji"""
+class OptimizationSettingsContainer:
 
     def __init__(self, include_sample_related_settings: bool):
 
@@ -31,10 +30,6 @@ class OptimizationSettingsContainer():
         self.maximum_number_of_iterations = 1000
         self.plot_every_steps = 1
 
-        # todo: add further parameters
-        # self.precision = 1.e-9
-        # self.maximum_number_of_iterations = 1000
-
         # define keys for storing the properties in the settings file
         self.maximize_key = "maximize"
         self.name_of_value_to_be_optimized_key = "name_of_value_to_be_optimized"
@@ -43,10 +38,6 @@ class OptimizationSettingsContainer():
         self.plot_every_steps_key = "plot_every_steps"
 
     def get_properties_as_dict(self) -> dict:
-        """
-        Return dictionary of properties to store in settings file
-        :return:
-        """
 
         property_dict = {}
 

@@ -1,8 +1,7 @@
 import PySide2.QtWidgets as QtWidgets
 import PySide2.QtCore as QtCore
 
-# from simoji.lib.gui.parameter_container_widgets.ExperimentalInputScrollWidget import ExperimentalInputScrollWidget
-from simoji.lib.gui.exp_input.DatasetScrollWidget import DatasetScrollWidget
+from simoji.lib.gui.evaluation_sets.EvaluationSetScrollWidget import EvaluationSetScrollWidget
 from simoji.lib.gui.parameter_widgets.FloatParWidget import FloatParWidget
 from simoji.lib.gui.layers.LayerStackScrollWidget import LayerStackScrollWidget
 from simoji.lib.gui.parameter_container_widgets.ParameterContainerScrollWidget import ParameterContainerScrollWidget
@@ -21,7 +20,7 @@ class SampleWidget(QtWidgets.QMainWindow):
     """
     Dockwidget that contains
     (1) generic module parameters
-    (2) experimental input parameters
+    (2) evaluation set parameters
     (3) variables_and_expressions, expressions, (functions)
     (4) optimization settings
     (5) layer structure
@@ -40,8 +39,8 @@ class SampleWidget(QtWidgets.QMainWindow):
         self.generic_parameters_widget_name = "generic parameters"
         self.generic_parameters_widget = ParameterContainerScrollWidget()
 
-        self.experimental_input_widget_name = "experimental input"
-        self.experimental_input_widget = DatasetScrollWidget()
+        self.evaluation_sets_widget_name = "evaluation sets"
+        self.evaluation_sets_widget = EvaluationSetScrollWidget()
 
         self.variables_widget_name = "variables"
         self.variables_widget = ParameterContainerScrollWidget(is_module_dependent=False)
@@ -75,7 +74,7 @@ class SampleWidget(QtWidgets.QMainWindow):
 
         self.generic_parameters_widget.parameter_container_widget.float_par_added_sig.connect(self.add_float_par_widget)
         self.layer_stack_widget.layer_stack_widget.float_par_added_sig.connect(self.add_float_par_widget)
-        self.experimental_input_widget.dataset_containers_widget.float_par_added_sig.connect(self.add_float_par_widget)
+        self.evaluation_sets_widget.evaluation_set_containers_widget.float_par_added_sig.connect(self.add_float_par_widget)
 
         add_variable_action = QtWidgets.QAction("Add variable", self)
         self.variables_widget.add_context_menu_action(add_variable_action, self.add_variable)
@@ -88,7 +87,7 @@ class SampleWidget(QtWidgets.QMainWindow):
         self.expressions_widget.parameter_container_widget.parameter_deleted_sig.connect(self.sync_free_parameter_deleted)
 
         self.add_dockwidget(self.generic_parameters_widget_name, self.generic_parameters_widget)
-        self.add_dockwidget(self.experimental_input_widget_name, self.experimental_input_widget)
+        self.add_dockwidget(self.evaluation_sets_widget_name, self.evaluation_sets_widget)
         self.add_dockwidget(self.variables_widget_name, self.variables_widget)
         self.add_dockwidget(self.expressions_widget_name, self.expressions_widget)
         self.add_dockwidget(self.optimization_widget_name, self.optimization_widget)
@@ -98,18 +97,18 @@ class SampleWidget(QtWidgets.QMainWindow):
 
     def set_module(self, module: AbstractModule):
         self.generic_parameters_widget.set_module(module)
-        self.experimental_input_widget.set_module(module)
+        self.evaluation_sets_widget.set_module(module)
         self.optimization_widget.set_module(module)
         self.layer_stack_widget.set_module(module)
 
-        # disable experimental input widget for simulator modules
-        exp_dock_widget = self.name_dockwidget_dict[self.experimental_input_widget_name]
-        enable_exp_input = (isinstance(module, Reader) or isinstance(module, Fitter))
-        self._enable_dockwidget(enable_exp_input, exp_dock_widget)
+        # disable evaluation sets widget for modules without evaluation set parameters
+        evaluation_set_dock_widget = self.name_dockwidget_dict[self.evaluation_sets_widget_name]
+        enable_evaluation_set_widget = module.has_evaluation_parameters()
+        self._enable_dockwidget(enable_evaluation_set_widget, evaluation_set_dock_widget)
 
         # disable layer widget if no layer parameters given
         layer_dock_widget = self.name_dockwidget_dict[self.layer_stack_widget_name]
-        enable_layers = (len(module.module_parameters.get_layer_parameters()) > 0)
+        enable_layers = (len(module.available_layers) > 0)
         self._enable_dockwidget(enable_layers, layer_dock_widget)
 
     def set_execution_mode(self, execution_mode: ExecutionMode):
@@ -149,7 +148,7 @@ class SampleWidget(QtWidgets.QMainWindow):
             dockwidget.hide()
 
     def load_sample_values(self, sample: Sample):
-        """Set the values store in sample to the widgets"""
+        """Set the values stored in sample to the widgets"""
 
         for parameter in sample.variables.get_parameters():
             self.add_variable(parameter)
@@ -158,7 +157,7 @@ class SampleWidget(QtWidgets.QMainWindow):
             self.add_expression(parameter)
 
         self.generic_parameters_widget.set_parameter_container(sample.generic_parameters)
-        self.experimental_input_widget.set_parameter_container_list(sample.get_experimental_datasets())
+        self.evaluation_sets_widget.set_parameter_container_list(sample.get_evaluation_sets())
         self.optimization_widget.set_settings_container(sample.optimization_settings)
 
         self.layer_stack_widget.set_layer_list(sample.layer_list)
@@ -168,10 +167,9 @@ class SampleWidget(QtWidgets.QMainWindow):
         self.sample.set_variables_parameter_container(self.variables_widget.get_parameter_container())
         self.sample.set_expressions_parameter_container(self.expressions_widget.get_parameter_container())
         self.sample.set_generic_parameter_container(self.generic_parameters_widget.get_parameter_container())
-        self.sample.set_experimental_parameter_container_list(
-            self.experimental_input_widget.get_parameter_container_list())
+        self.sample.set_evaluation_set_parameter_container_list(
+            self.evaluation_sets_widget.get_parameter_container_list())
         self.sample.set_optimization_settings_container(self.optimization_widget.get_settings_container())
-
         self.sample.set_layer_list(self.layer_stack_widget.get_layer_list())
 
         return self.sample
@@ -204,7 +202,6 @@ class SampleWidget(QtWidgets.QMainWindow):
 
         try:
             var_name = variable.name
-            var_idx = int(var_name.replace(self.variable_prefix, ''))
         except:
             i = 0
             while (self.variable_prefix + str(i)) in self.variable_names:
@@ -239,7 +236,6 @@ class SampleWidget(QtWidgets.QMainWindow):
 
         try:
             expr_name = expression.name
-            expr_idx = int(expr_name.replace(self.expression_prefix, ''))
         except:
             i = 0
             while (self.expression_prefix + str(i)) in self.expression_names:
@@ -318,37 +314,3 @@ class SampleWidget(QtWidgets.QMainWindow):
                 dockwidget.show()
             else:
                 dockwidget.hide()
-
-    # def set_title_bar(self, dockwidget: QtWidgets.QDockWidget):
-    #     if len(self.tabifiedDockWidgets(dockwidget)) == 0:
-    #         self.show_title_bar(dockwidget)
-    #         for any_dockwidget in self.dockwidget_list:
-    #             try:
-    #                 if any_dockwidget.titleBarWidget().name == EmptyWidget().name:
-    #                     self.show_title_bar(any_dockwidget)
-    #             except:
-    #                 pass
-    #     else:
-    #         for dockwidget_tabified in self.tabifiedDockWidgets(dockwidget):
-    #             self.hide_title_bar(dockwidget_tabified)
-    #         self.hide_title_bar(dockwidget)
-    #
-    # def hide_title_bar(self, dockwidget: QtWidgets.QDockWidget):
-    #     dockwidget.setTitleBarWidget(EmptyWidget())
-    #
-    # def show_title_bar(self, dockwidget:  QtWidgets.QDockWidget):
-    #
-    #     label_widget = QtWidgets.QLabel(self.dockwidget_name_dict[dockwidget])
-    #     label_widget.setStyleSheet("font-weight: bold")
-    #     dockwidget.setTitleBarWidget(label_widget)
-
-
-class EmptyWidget(QtWidgets.QWidget):
-
-    def __init__(self):
-        super().__init__()
-
-        self.name = "empty_widget"
-        self.layout = QtWidgets.QVBoxLayout()
-        self.layout.setMargin(1)
-        self.setLayout(self.layout)

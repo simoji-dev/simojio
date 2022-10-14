@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
-import numpy as np
-import os
-import json
 import csv
-from typing import *
+from typing import Optional
 
 from simoji.lib.plotter.SaveDataFileFormats import SaveDataFileFormats
 from simoji.lib.BasicFunctions import *
@@ -71,8 +68,6 @@ class PlotDataSaver:
 
                         plot_data_collections.append(xyz_data)
                         data_set_labels_collections.append(collection.get_label())
-
-            # todo: error message if data cannot be saved (e.g. contourf)
 
             if len(plot_data_lines) > 0:
                 save_dict_lines = {
@@ -147,7 +142,8 @@ class PlotDataSaver:
                 self._save_to_file(save_dict=save_dict_collections, ax_idx=idx, figure_save_path=figure_save_path,
                                    suffix=suffix)
 
-    def _extent_to_xy(self, extent: list, shape_2d) -> (list, list):
+    @staticmethod
+    def _extent_to_xy(extent: list, shape_2d) -> (list, list):
 
         left, right, bottom, top = extent
 
@@ -210,8 +206,6 @@ class PlotDataSaver:
     def _save_as_json(self, file_path: str, save_dict: dict):
         """Save as .json file with multiple data sets in one file."""
 
-        print("json saving")
-
         json_file = open(file_path, 'w', encoding='utf-8')
         json.dump(save_dict, json_file, sort_keys=True, indent=4)
         json_file.close()
@@ -222,8 +216,6 @@ class PlotDataSaver:
 
         Problem: 2D data -> convert to column style
         """
-
-        print('csv saving')
 
         label_keys = [self.x_label_key, self.y_label_key, self.z_label_key]
         labels = []
@@ -251,8 +243,6 @@ class PlotDataSaver:
         Problem: 2D data -> convert to column style
         """
 
-        print('txt saving')
-
         label_keys = [self.x_label_key, self.y_label_key, self.z_label_key]
         labels = []
 
@@ -271,7 +261,8 @@ class PlotDataSaver:
                 # write data
                 outtxt.writelines([",".join([str(val) for val in row]) + "\n" for row in data])
 
-    def _convert_to_column_style(self, data: list) -> np.array:
+    @staticmethod
+    def _convert_to_column_style(data: list) -> np.array:
         """
         Data can be present as lists with same shape (as meshgrid style in numpy), e.g.
 
