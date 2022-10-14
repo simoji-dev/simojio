@@ -1,4 +1,4 @@
-<p align="center"><img src="simoji/lib/gui/icon/simoji_logo.svg" width="300" ></p>
+<p align="center"><img src="simoji/lib/gui/icon/simoji_logo.svg" width="100" ></p>
 
 ***
 # simoji
