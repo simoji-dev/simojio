@@ -6,8 +6,8 @@
         "global_variables": {},
         "module_path": [
             "modules",
-            "MyModule",
-            "MyModule.py"
+            "RTA",
+            "RTA.py"
         ],
         "optimization_settings": {
             "maximize": false,
@@ -29,21 +29,6 @@
                     1.0
                 ],
                 "2D calculation": true,
-                "a": [
-                    1.0,
-                    "VAR_0",
-                    true
-                ],
-                "b": [
-                    2.0,
-                    "VAR_0",
-                    false
-                ],
-                "c": [
-                    3.0,
-                    "VAR_0",
-                    false
-                ],
                 "design wavelength": 600.0,
                 "illumination direction": "top illumination",
                 "polarization": "p",
@@ -387,17 +372,24 @@
                     "type": "semi"
                 }
             ],
-            "name": "sample1",
+            "name": "DBR",
             "optimization_settings": {
                 "maximize": false,
                 "maximum_number_of_iterations": 1000,
-                "name_of_value_to_be_optimized": "",
+                "name_of_value_to_be_optimized": "R design",
                 "plot_every_steps": 1,
                 "solver": "Nelder-Mead"
             },
             "variables": {
                 "VAR_0": [
-                    1.0,
+                    69.0,
+                    0.0,
+                    200.0,
+                    20.0,
+                    true
+                ],
+                "VAR_1": [
+                    104.0,
                     0.0,
                     200.0,
                     20.0,
