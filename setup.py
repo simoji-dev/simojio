@@ -8,7 +8,6 @@ setup(
                       'psutil==5.9.0'],
     url='https://github.com/simoji-dev/simoji',
     license='LGPLv3',
-    author='Christian Haenisch',
-    author_email='christian.haenisch@tu-dresden.de',
+    author='elmogit',
     description='Framework for running python modules with multidimensional parameter sets'
 )

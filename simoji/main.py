@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 __version__ = "2.0.0"
-__author__ = "christian.haenisch@tu-dresden.de"
+__author__ = "elmogit"
 
 if __name__ == '__main__':
 
