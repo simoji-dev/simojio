@@ -29,13 +29,33 @@
                     1.0
                 ],
                 "2D calculation": true,
+                "amplitude": [
+                    1.0,
+                    "VAR_0",
+                    false
+                ],
                 "design wavelength": 600.0,
                 "illumination direction": "top illumination",
                 "polarization": "p",
+                "position": [
+                    0.0,
+                    "VAR_0",
+                    true
+                ],
                 "wavelengths": [
                     400.0,
                     800.0,
                     1.0
+                ],
+                "width": [
+                    1.0,
+                    "VAR_0",
+                    false
+                ],
+                "x": [
+                    0.0,
+                    10.0,
+                    0.1
                 ]
             },
             "layers": [
