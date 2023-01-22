@@ -1,0 +1,201 @@
+{
+    "global_settings": {
+        "enable_global_optimization_settings": false,
+        "execution_mode": "single",
+        "global_expressions": {},
+        "global_variables": {},
+        "module_path": [
+            "modules",
+            "OledOptics",
+            "OledOptics.py"
+        ],
+        "optimization_settings": {
+            "maximize": false,
+            "maximum_number_of_iterations": 1000,
+            "plot_every_steps": 1,
+            "solver": "Nelder-Mead"
+        },
+        "simoji_version": "2.0.0"
+    },
+    "samples": [
+        {
+            "enable": true,
+            "evaluation_set_parameters": [],
+            "expressions": {},
+            "generic_parameters": {
+                "angles": [
+                    0.0,
+                    89.0,
+                    1.0
+                ],
+                "calculate EQE": true,
+                "calculate SRI": true,
+                "calculate optical loss channels": true,
+                "calculate power dissipation spectra": true,
+                "plot mode power dissipation": "u",
+                "polarization": "total",
+                "wave-vectors": [
+                    0.0,
+                    3.5,
+                    0.02
+                ],
+                "wavelengths": [
+                    500.0,
+                    750.0,
+                    2.0
+                ]
+            },
+            "layers": [
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "air",
+                    "parameters": {
+                        "material": "air.fmf"
+                    },
+                    "type": "semi"
+                },
+                {
+                    "color": [
+                        0,
+                        0,
+                        200,
+                        50
+                    ],
+                    "enable": true,
+                    "name": "glass",
+                    "parameters": {
+                        "material": "glass.fmf",
+                        "thickness": [
+                            1100000.0,
+                            "",
+                            false
+                        ]
+                    },
+                    "type": "substrate"
+                },
+                {
+                    "color": [
+                        0,
+                        200,
+                        0,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "organic",
+                    "parameters": {
+                        "material": "organic.fmf",
+                        "thickness": [
+                            50.0,
+                            "",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        245,
+                        121,
+                        0,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "organic",
+                    "parameters": {
+                        "PL spectrum": "PLSpectrum_organic.txt",
+                        "anisotropy coefficient": [
+                            0.3333333333333333,
+                            "",
+                            false
+                        ],
+                        "eta_rad": [
+                            1.0,
+                            "",
+                            false
+                        ],
+                        "gamma": [
+                            1.0,
+                            "",
+                            false
+                        ],
+                        "material": "organic.fmf",
+                        "number of dipoles": 1.0,
+                        "thickness": [
+                            10.0,
+                            "",
+                            false
+                        ]
+                    },
+                    "type": "emission"
+                },
+                {
+                    "color": [
+                        0,
+                        200,
+                        0,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "organic",
+                    "parameters": {
+                        "material": "organic.fmf",
+                        "thickness": [
+                            50.0,
+                            "",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        136,
+                        138,
+                        133,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "Al",
+                    "parameters": {
+                        "material": "Al.fmf",
+                        "thickness": [
+                            100.0,
+                            "",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "air",
+                    "parameters": {
+                        "material": "air.fmf"
+                    },
+                    "type": "semi"
+                }
+            ],
+            "name": "OLED",
+            "optimization_settings": {
+                "maximize": false,
+                "maximum_number_of_iterations": 1000,
+                "name_of_value_to_be_optimized": "EQE [%]",
+                "plot_every_steps": 1,
+                "solver": "Nelder-Mead"
+            },
+            "variables": {}
+        }
+    ]
+}
