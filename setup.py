@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='simoji',
     packages=['simoji', 'simoji.modules'],
-    install_requires=['PySide2', 'numpy', 'scipy', 'matplotlib', 'anytree', 'psutil'],
+    install_requires=['PySide2', 'numpy', 'scipy', 'matplotlib', 'anytree', 'psutil', 'packaging'],
     url='https://github.com/simoji-dev/simoji',
     license='LGPLv3',
     author='elmogit',
