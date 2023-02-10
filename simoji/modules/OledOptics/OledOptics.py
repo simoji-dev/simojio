@@ -428,15 +428,19 @@ class OledOptics(Calculator):
             u_crit_sub = nk_arr[1] / nk_arr[emission_layer_idx]
 
         # take smallest n value of organic layers
-        u_crit_wg = []
+        # u_crit_wg = []
+        # if self.is_substrate_in_stack:
+        #     nk_org = nk_arr[2:-1].T
+        # else:
+        #     nk_org = nk_arr[1:-1].T
+        # for i in range(len(self.wavelength_arr)):
+        #     idx_min = np.argmin([nk.real for nk in nk_org[i]])
+        #     u_crit_wg.append(nk_arr[idx_min][i] / nk_arr[emission_layer_idx][i])
+        # u_crit_wg = np.array(u_crit_wg)
         if self.is_substrate_in_stack:
-            nk_org = nk_arr[2:-1].T
+            u_crit_wg = nk_arr[1] / nk_arr[emission_layer_idx]
         else:
-            nk_org = nk_arr[1:-1].T
-        for i in range(len(self.wavelength_arr)):
-            idx_min = np.argmin([nk.real for nk in nk_org[i]])
-            u_crit_wg.append(nk_arr[idx_min][i] / nk_arr[emission_layer_idx][i])
-        u_crit_wg = np.array(u_crit_wg)
+            u_crit_wg = nk_arr[0] / nk_arr[emission_layer_idx]
 
         # --  calculate power dissipation spectrum in EML --
         K_eml_list = []
