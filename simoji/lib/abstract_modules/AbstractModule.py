@@ -63,17 +63,26 @@ class AbstractModule(metaclass=abc.ABCMeta):
     def get_generic_parameter_value(self, parameter: Parameter):
         return self._get_parameter_value(parameter, self.generic_parameters)
 
+    def is_generic_parameter_updated(self, parameter: Parameter) -> bool:
+        return self._is_parameter_updated(parameter, self.generic_parameters)
+
     def get_evaluation_parameter(self, parameter: Parameter):
         return self._get_parameter(parameter, self.evaluation_set_parameters)
 
     def get_evaluation_parameter_value(self, parameter: Parameter):
         return self._get_parameter_value(parameter, self.evaluation_set_parameters)
 
+    def is_evaluation_parameter_updated(self, parameter: Parameter) -> bool:
+        return self._is_parameter_updated(parameter, self.evaluation_set_parameters)
+
     def get_layer_parameter(self, parameter: Parameter, layer: Layer) -> Parameter:
         return self._get_parameter(parameter, layer.parameters)
 
     def get_layer_parameter_value(self, parameter: Parameter, layer: Layer):
         return self._get_parameter_value(parameter, layer.parameters)
+
+    def is_layer_parameter_updated(self, parameter: Parameter, layer: Layer) -> bool:
+        return self._is_parameter_updated(parameter, layer.parameters)
 
     @staticmethod
     def _get_parameter(initial_parameter: Parameter, parameter_list: List[Parameter]):
@@ -92,3 +101,7 @@ class AbstractModule(metaclass=abc.ABCMeta):
             return parameter.value
         else:
             raise ValueError("Unknown parameter type" + str(parameter))
+
+    def _is_parameter_updated(self, initial_parameter: Parameter, parameter_list: List[Parameter]) -> bool:
+        parameter = self._get_parameter(initial_parameter, parameter_list)
+        return parameter.is_updated

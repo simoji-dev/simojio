@@ -74,6 +74,7 @@ class VariationContainerEvaluationSet:
                                                                                   all_variables_values_dict)
                 self.fix_parameters.update({category: fix_parameters})
                 self.varied_parameters.update({category: varied_parameters})
+
             elif category is ParameterCategory.LAYER:
                 fix_parameters_layers_list = []
                 varied_parameters_layers_list = []
@@ -118,6 +119,7 @@ class VariationContainerEvaluationSet:
                         else:
                             parameter.set_float_value(float(variable.get_current_value()))
                             parameter.is_set_to_free_parameter.value = False
+                            parameter.is_updated = False
                             fix_parameters.append(parameter)
                             self.fix_variables_dict.update({variable.name: variable.get_current_value()})
                     # expression
@@ -132,6 +134,7 @@ class VariationContainerEvaluationSet:
                             else:
                                 parameter.set_float_value(float(eval_str))
                                 parameter.is_set_to_free_parameter.value = False
+                                parameter.is_updated = False
                                 fix_parameters.append(parameter)
                             for var_name in used_variables:
                                 variable = all_variables_dict[var_name]
@@ -145,8 +148,10 @@ class VariationContainerEvaluationSet:
                     else:
                         raise ValueError("FloatParameter value not found in variables or expressions")
                 else:
+                    parameter.is_updated = False
                     fix_parameters.append(parameter)
             else:
+                parameter.is_updated = False
                 fix_parameters.append(parameter)   # Non-FloatParameter already converted to value
 
         return fix_parameters, varied_parameters
@@ -238,8 +243,7 @@ class VariationContainerEvaluationSet:
 
         return category_list
 
-    def _fill_module_input_container(self, varied_parameters: dict,
-                                     label_fix_parameters_as_updated=True) -> ModuleInputContainer:
+    def _fill_module_input_container(self, varied_parameters: dict) -> ModuleInputContainer:
 
         module_input_container = ModuleInputContainer()
 
@@ -257,15 +261,6 @@ class VariationContainerEvaluationSet:
         if ParameterCategory.LAYER in self.fix_parameters:
             layer_parameters = [self.fix_parameters[ParameterCategory.LAYER][i] + varied_parameters[
                 ParameterCategory.LAYER][i] for i in range(len(self.fix_parameters[ParameterCategory.LAYER]))]
-
-        if label_fix_parameters_as_updated:
-            for parameter in generic_parameters:
-                parameter.is_updated = True
-            for parameter in evaluation_set_parameters:
-                parameter.is_updated = True
-            for layer_content in layer_parameters:
-                for parameter in layer_content:
-                    parameter.is_updated = True
 
         module_input_container.generic_parameters = generic_parameters
         module_input_container.evaluation_set_parameters = evaluation_set_parameters
@@ -289,6 +284,6 @@ class VariationContainerEvaluationSet:
 
     def get_input_container_for_optimization(self, variable_values: List[float]) -> ModuleInputContainer:
         varied_parameters = self.get_varied_module_parameters(variable_values)
-        return self._fill_module_input_container(varied_parameters, label_fix_parameters_as_updated=False)
+        return self._fill_module_input_container(varied_parameters)
 
 
