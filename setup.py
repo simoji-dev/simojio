@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='simoji',
-    packages=['simoji', 'simoji.modules'],
+    name='simojio',
+    packages=['simojio', 'simojio.modules'],
     install_requires=['PySide2', 'numpy', 'scipy', 'matplotlib', 'anytree', 'psutil'],
     url='https://github.com/simoji-dev/simoji',
     license='LGPLv3',

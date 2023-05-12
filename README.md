@@ -1,19 +1,19 @@
-# <img src="simoji/lib/gui/icon/simoji_logo.svg" width="30" > simoji 
+# <img src="simojio/lib/gui/icon/simojio_logo.svg" width="30" > simojio 
 
-Simoji is an open source software which enables multidimensional variations of parameter based 
+Simojio is an open source software which enables multidimensional variations of parameter based 
 calculation modules. It provides an intuitive and flexible GUI for managing multiple sets of 
 parameter configurations in parallel. Besides the input of generic parameters, one-dimensional layer structures can be
 constructed and modified by intuitive drag and drop actions. 
-Important features of simoji are the automated parallel processing of multiple parameter input sets and the structured 
+Important features of simojio are the automated parallel processing of multiple parameter input sets and the structured 
 organization of results in a separate plot window. 
 
-Besides some example modules, simoji includes modules for optical simulations of thin-film samples as for instance 
+Besides some example modules, simojio includes modules for optical simulations of thin-film samples as for instance 
 organic light-emitting diodes (OLEDs). The `RTA` module calculates reflection, transmission, and absorption of a 
 coherent layer stack and the `OledOptics` module simulates power dissipation, efficiency, and angle-resolved emission of 
-OLEDs. Each module is defined in a separate sub-folder of the `simoji/modules` directory and contains another readme 
+OLEDs. Each module is defined in a separate sub-folder of the `simojio/modules` directory and contains another readme 
 file with specific information about the module.
 
-Thank you very much for considering to use and/or contribute to simoji. You can either use the program by running 
+Thank you very much for considering to use and/or contribute to simojio. You can either use the program by running 
 existing modules or extend it by writing your own modules. Of course, you are also warmly invited to contribute to the 
 core program!
 ***
@@ -40,21 +40,21 @@ core program!
 
 This program was mainly developed as part of the doctorate work by 
 [Christian Hänisch](https://orcid.org/0000-0003-1331-9507) at the TU Dresden assisted by further 
-[contributors](https://github.com/simoji-dev/simoji). The main idea of simoji is to provide a flexible way to extend a 
+[contributors](https://github.com/simojio-dev/simojio). The main idea of simojio is to provide a flexible way to extend a 
 parameter based calculation to multidimensional variations. Let's take a look at a simple example which illustrates 
 this:
 
 Imagine there is a calculation which depends on three floating point parameters `a`, `b`, and `c` which are passed to a 
-simoji module called `MyModule` that returns a `result` value. In the GUI of simoji you will get an input field for each
+simojio module called `MyModule` that returns a `result` value. In the GUI of simojio you will get an input field for each
 parameter which you can fill with a floating point value which will be passed to the module. This is the most basic way
-of using simoji. However, instead of setting a floating point value, you can fill your parameter value with a so-called 
+of using simojio. However, instead of setting a floating point value, you can fill your parameter value with a so-called 
 `variable` which you define in a separate widget and which takes a current value but also a start, stop, and step value. 
-For instance, the parameter `a` could be filled by a variable `VAR_0` as shown in the following screenshot of the simoji
+For instance, the parameter `a` could be filled by a variable `VAR_0` as shown in the following screenshot of the simojio
 main window:
 
-<p align="center"><img src="simoji/lib/readme_pics/main_window_set_variable_on_parameter.png" width="400" ></p>
+<p align="center"><img src="simojio/lib/readme_pics/main_window_set_variable_on_parameter.png" width="400" ></p>
 
-Now simoji provides different execution modes which the user can choose. In `single` mode, the current value of the 
+Now simojio provides different execution modes which the user can choose. In `single` mode, the current value of the 
 `variable` is set for the parameter. Much more interesting, in `variation` mode, all values in the range between start 
 and stop value (separated by the step length) are iteratively passed to the module which now returns not a single result
 but a collection of results for each variation step. It is important to note that not only a single parameter can be 
@@ -63,16 +63,16 @@ it could be that the parameters `a` and `b` take the variable `VAR_0` whereas pa
 `VAR_1`. In this case, the variation would cover a two-dimensional parameter space with one specific input value 
 configuration for each point in this space. The results of each variation step are displayed in separate tabs in the 
 so-called `plot window`. It also contains a `global` tab which summarizes the numerical results and variable values of 
-each variation step. A third execution mode of simoji is the `optimization`. It is based on minimizing or maximizing a
+each variation step. A third execution mode of simojio is the `optimization`. It is based on minimizing or maximizing a
 result value of the module by walking through the parameter space defined by all variables which are set to the 
 parameters. In the following picture a comparison of result values from `variation` and `optimization` mode are given 
 for a calculation of the efficiency of an organic light-emitting diode depending on two thickness values.
 
-<p align="center"><img src="simoji/lib/readme_pics/variation_results.svg" width="400" ></p>
+<p align="center"><img src="simojio/lib/readme_pics/variation_results.svg" width="400" ></p>
 
 ## Prerequisites
 
-Simoji requires python3. It is cross-platform operable and tested with python3.6 on Windows10 and LinuxMint19 but 
+simojio requires python3. It is cross-platform operable and tested with python3.6 on Windows10 and LinuxMint19 but 
 should, in principle, also work on other operating systems. 
 
 The following python packages are needed:
@@ -114,7 +114,7 @@ pip install -e .
 The `-e` flag makes sure that program is installed in an editable state, and all the edits made to the .py files will be 
 automatically included in the installed package.
 
-Finally, we can run simoji by navigating to the `simoji` folder and execute 
+Finally, we can run simojio by navigating to the `simojio` folder and execute 
 
 ```
 python main.py
@@ -123,7 +123,7 @@ python main.py
 
 One can build an executable file by using pyinstaller in the top level folder:
 
-`pyinstaller simoji_builder.spec`
+`pyinstaller simojio_builder.spec`
 
 This will create an executable file in the `dist` folder which can then be copied and run on other systems with the same 
 OS. 
@@ -167,7 +167,7 @@ todo
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the 
-[tags on this repository](https://github.com/simoji-dev/simoji/tags). 
+[tags on this repository](https://github.com/simojio-dev/simojio/tags). 
 
 ## License
 
@@ -180,5 +180,5 @@ Big thanks to:
 ideas like module loading and figure sending
 * Sebastian for supporting my rather unphysical side project
 * StackOverflow for countless pieces of help and inspiration
-* All early-day simoji users who gave me valuable feedback 
+* All early-day simojio users who gave me valuable feedback 
 
