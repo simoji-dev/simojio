@@ -123,8 +123,8 @@ class VariationContainerEvaluationSet:
                     # expression
                     elif value_str in self.expressions_dict:
                         success, eval_str, used_variables = check_expression(self.expressions_dict[value_str],
-                                                                              all_variables_values_dict,
-                                                                              return_used_parameters=True)
+                                                                             all_variables_values_dict,
+                                                                             return_used_parameters=True)
                         if success:
                             if any([all_variables_dict[var_name].get_variation_flag() for var_name in used_variables]):
                                 # any variable in expression is varied -> put it to varied_parameters
@@ -135,7 +135,10 @@ class VariationContainerEvaluationSet:
                                 fix_parameters.append(parameter)
                             for var_name in used_variables:
                                 variable = all_variables_dict[var_name]
-                                if not variable.get_variation_flag():
+                                if variable.get_variation_flag():
+                                    if var_name not in self.get_varied_variables_names():
+                                        self.varied_variables.append(variable)
+                                else:
                                     self.fix_variables_dict.update({var_name: variable.get_current_value()})
                         else:
                             raise ValueError("Could not evaluate '" + value_str + "' = " + self.expressions_dict[value_str])
