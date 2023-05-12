@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     from simoji.lib.gui.MainWindow import MainWindow
 
-    # multiprocessing.set_start_method('spawn')       # Set spawn method for all OS, in Linux it would be fork by default
+    multiprocessing.set_start_method('spawn')   # Set spawn method for all OS, in Linux it would be fork by default
     if platform.system() == 'Windows':
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("simoji_v" + __version__)  # to show icon in bar
 
