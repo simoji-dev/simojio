@@ -4,5 +4,5 @@ class Parameter:
 
         self.name = None
         self.description = None
-        self.is_updated = False
+        self.is_updated = True
 

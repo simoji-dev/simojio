@@ -1,3 +1,5 @@
+import time
+
 from simoji.lib.abstract_modules import Calculator
 from simoji.lib.parameters import FloatParameter, StartStopStepParameter
 
@@ -33,6 +35,16 @@ class ExampleCalculator(Calculator):
         self.a = self.get_generic_parameter_value(self.amplitude_parameter)
         self.b = self.get_generic_parameter_value(self.position_parameter)
         self.c = self.get_generic_parameter_value(self.width_parameter)
+
+        # demonstration of how to check if a parameter was updated for the current module run
+        position_is_updated = self.is_generic_parameter_updated(self.position_parameter)
+        if position_is_updated:
+            self.long_running_data_loading()
+
+    def long_running_data_loading(self):
+        print("start data loading")
+        time.sleep(5)
+        print("end data loading")
 
     def run(self):
         self.update_generic_parameters()
