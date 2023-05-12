@@ -72,8 +72,9 @@ for a calculation of the efficiency of an organic light-emitting diode depending
 
 ## Prerequisites
 
-simojio requires python3. It is cross-platform operable and tested with python3.6 on Windows10 and LinuxMint19 but 
-should, in principle, also work on other operating systems. 
+Simojio requires `python3.6`.
+It is cross-platform operable and tested with python3.6 on Windows10 and LinuxMint19 but should, in principle, also work 
+on other operating systems. 
 
 The following python packages are needed:
 > PySide2 <br>
