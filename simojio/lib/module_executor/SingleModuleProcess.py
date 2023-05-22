@@ -4,6 +4,7 @@ from typing import Optional, List
 import copy
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
+import inspect
 
 from simojio.lib.ModuleInputContainer import ModuleInputContainer
 from simojio.lib.VariationContainer import VariationContainer
@@ -12,6 +13,7 @@ from simojio.lib.ModuleLoader import ModuleLoader
 from simojio.lib.module_executor.CurrentVariablesAndResultsContainer import CurrentVariablesAndResultsContainer
 from simojio.lib.module_executor.shared_functions import plot_optimization_steps
 from simojio.lib.abstract_modules import Calculator, Fitter
+from simojio.lib.parameters.Parameter import Parameter
 
 plt.rcParams.update({'figure.max_open_warning': 0})  # mute warning "More than 20 figures have been opened"
 
@@ -100,6 +102,7 @@ class SingleModuleProcess:
 
     def configure_and_run_module(self, next_task: ModuleInputContainer, variable_values: Optional[List[float]] = None):
 
+        self._set_generic_parameters(next_task.generic_parameters)
         self.module.generic_parameters = next_task.generic_parameters
         self.module.evaluation_set_parameters = next_task.evaluation_set_parameters
 
@@ -115,6 +118,15 @@ class SingleModuleProcess:
         self.result_queue.put(current_variables_and_results)
 
         return results_dict
+
+    def _set_generic_parameters(self, generic_parameters: List[Parameter]):
+
+        module_parameters = [a for a in inspect.getmembers(type(self.module)) if isinstance(a[1], Parameter)]
+        parameter_names = [par.name for par in generic_parameters]
+
+        for parameter in module_parameters:
+            new_parameter = generic_parameters[parameter_names.index(parameter[1].name)]
+            setattr(self.module, parameter[0], new_parameter)
 
     def initialize_module(self, module_name: str, result_queue: mp.Queue, save_path: str):
 

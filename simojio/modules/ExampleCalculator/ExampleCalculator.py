@@ -35,9 +35,12 @@ class ExampleCalculator(Calculator):
         self.a = self.get_generic_parameter_value(self.amplitude_parameter)
         self.b = self.get_generic_parameter_value(self.position_parameter)
         self.c = self.get_generic_parameter_value(self.width_parameter)
+        print(self.amplitude_parameter.value)
 
         # demonstration of how to check if a parameter was updated for the current module run
-        position_is_updated = self.is_generic_parameter_updated(self.position_parameter)
+        # position_is_updated = self.is_generic_parameter_updated(self.position_parameter)
+        position_is_updated = self.position_parameter.is_updated
+        print(position_is_updated)
         if position_is_updated:
             self.long_running_data_loading()
 
