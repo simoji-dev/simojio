@@ -125,8 +125,10 @@ class SingleModuleProcess:
         parameter_names = [par.name for par in generic_parameters]
 
         for parameter in module_parameters:
-            new_parameter = generic_parameters[parameter_names.index(parameter[1].name)]
-            setattr(self.module, parameter[0], new_parameter)
+            parameter_name = parameter[1].name
+            if parameter_name in parameter_names:
+                new_parameter = generic_parameters[parameter_names.index(parameter_name)]
+                setattr(self.module, parameter[0], new_parameter)
 
     def initialize_module(self, module_name: str, result_queue: mp.Queue, save_path: str):
 

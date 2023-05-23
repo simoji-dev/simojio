@@ -1,7 +1,10 @@
 import time
+import os
 
 from simojio.lib.abstract_modules import Calculator
-from simojio.lib.parameters import FloatParameter, StartStopStepParameter
+from simojio.lib.parameters import FloatParameter, StartStopStepParameter, FileFromPathParameter
+from simojio.lib.enums.LayerType import LayerType
+from simojio.lib.Layer import Layer
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,6 +22,13 @@ class ExampleCalculator(Calculator):
     # Add defined parameters to the container. Sort into respective parameter type (generic, evaluation set, layer)
     generic_parameters = [x_parameter, amplitude_parameter, position_parameter, width_parameter]
 
+    material_par = FileFromPathParameter(name="material", path=os.path.join("modules", "shared_resources",
+                                                                            "optical_constants"),
+                                         extension_list=[".fmf"], description="Material data file")
+    thickness_par = FloatParameter(name="thickness", value=50., bounds=(0., np.inf), description="layer thickness")
+
+    available_layers = [Layer(LayerType.COHERENT, parameters=[material_par, thickness_par])]
+
     def __init__(self):
         super(ExampleCalculator, self).__init__()
 
@@ -30,27 +40,35 @@ class ExampleCalculator(Calculator):
 
         self.y = None
 
+        self.data = None
+
     def update_generic_parameters(self):
         self.x = np.arange(*self.get_generic_parameter_value(self.x_parameter))
         self.a = self.get_generic_parameter_value(self.amplitude_parameter)
         self.b = self.get_generic_parameter_value(self.position_parameter)
         self.c = self.get_generic_parameter_value(self.width_parameter)
-        print(self.amplitude_parameter.value)
 
         # demonstration of how to check if a parameter was updated for the current module run
-        # position_is_updated = self.is_generic_parameter_updated(self.position_parameter)
         position_is_updated = self.position_parameter.is_updated
         print(position_is_updated)
-        if position_is_updated:
+
+        # todo: In the first iteration, parameter.is_updated should be true
+        if position_is_updated or (self.data is None):
             self.long_running_data_loading()
 
     def long_running_data_loading(self):
+        print("----")
         print("start data loading")
         time.sleep(5)
+        self.data = 1
         print("end data loading")
 
     def run(self):
+        print("RUN")
         self.update_generic_parameters()
+
+        thickness_parameters = [self.get_layer_parameter(self.thickness_par, layer) for layer in self.layer_list]
+
 
         self.y = self.gaussian(self.x, self.a, self.b, self.c)
         self.plot()
