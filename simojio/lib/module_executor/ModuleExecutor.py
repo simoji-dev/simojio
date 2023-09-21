@@ -159,9 +159,10 @@ class ModuleExecutor(QtCore.QObject):
 
         empty_samples = [sample.name for sample in self.sample_list if sample.name not in filled_samples]
 
-        self._show_callback(CallbackContainer(title="Missing input parameters",
-                                              message="No evaluation set given in sample(s): '"
-                                                      + ", ".join(empty_samples)))
+        if len(empty_samples) > 0:
+            self._show_callback(CallbackContainer(title="Missing input parameters",
+                                                  message="No evaluation set given in sample(s): '"
+                                                          + ", ".join(empty_samples)))
 
 
 if __name__ == "__main__":
