@@ -1,0 +1,372 @@
+{
+    "global_settings": {
+        "enable_global_optimization_settings": false,
+        "execution_mode": "single",
+        "global_expressions": {},
+        "global_variables": {},
+        "module_path": [
+            "modules",
+            "SriSimulator",
+            "SriSimulator.py"
+        ],
+        "optimization_settings": {
+            "maximize": false,
+            "maximum_number_of_iterations": 1000,
+            "plot_every_steps": 1,
+            "solver": "Nelder-Mead"
+        },
+        "simoji_version": "2.0.0"
+    },
+    "samples": [
+        {
+            "enable": true,
+            "evaluation_set_parameters": [
+                {
+                    "Path to example data": [
+                        "modules",
+                        "ExamplePlotter",
+                        "example_data.txt"
+                    ],
+                    "SRI data": [
+                        "modules",
+                        "SriPlotter",
+                        "example_data"
+                    ],
+                    "file path": [
+                        "modules",
+                        "ExamplePlotter",
+                        "example_data.txt"
+                    ]
+                }
+            ],
+            "expressions": {},
+            "generic_parameters": {
+                "1D angle": [
+                    0.0,
+                    "VAR_0",
+                    false
+                ],
+                "1D calculation": true,
+                "2D angles": [
+                    0.0,
+                    89.0,
+                    1.0
+                ],
+                "2D calculation": true,
+                "Ex": [
+                    0.0,
+                    "VAR_0",
+                    false
+                ],
+                "Ez": [
+                    -1.0,
+                    "VAR_0",
+                    false
+                ],
+                "Mx": [
+                    0.0,
+                    "VAR_0",
+                    false
+                ],
+                "Mz": [
+                    0.0,
+                    "VAR_0",
+                    false
+                ],
+                "a": [
+                    1.0,
+                    "VAR_0",
+                    true
+                ],
+                "amplitude": [
+                    1.0,
+                    "VAR_0",
+                    false
+                ],
+                "angle cycle": 0.0,
+                "angle offset": [
+                    0.0,
+                    "VAR_0",
+                    false
+                ],
+                "angles": [
+                    5.0,
+                    89.0,
+                    5.0
+                ],
+                "b": true,
+                "boxcar": [
+                    20.0,
+                    "VAR_0",
+                    false
+                ],
+                "calculate EQE": true,
+                "calculate SRI": true,
+                "calculate optical loss channels": false,
+                "calculate power dissipation spectra": false,
+                "design wavelength": 600.0,
+                "do SRI correction": true,
+                "enable angle-wavelength grid": true,
+                "exclude angles": "",
+                "illumination direction": "top illumination",
+                "intensity drift correction": "linear",
+                "normalize SRI": true,
+                "plot mode power dissipation": "u",
+                "polarization": "p",
+                "position": [
+                    0.0,
+                    "VAR_0",
+                    false
+                ],
+                "reference angle": [
+                    10.0,
+                    "VAR_0",
+                    false
+                ],
+                "scale factor": [
+                    1.0,
+                    "",
+                    false
+                ],
+                "shift z detector": [
+                    0.2,
+                    "VAR_0",
+                    false
+                ],
+                "shift z lens 2": [
+                    139.0,
+                    "VAR_0",
+                    false
+                ],
+                "substrate thickness": [
+                    1.1,
+                    "VAR_0",
+                    false
+                ],
+                "wave-vectors": [
+                    0.0,
+                    3.5,
+                    0.02
+                ],
+                "wavelengths": [
+                    500.0,
+                    700.0,
+                    2.0
+                ],
+                "width": [
+                    1.0,
+                    "VAR_0",
+                    false
+                ],
+                "x": [
+                    0.0,
+                    10.0,
+                    0.1
+                ]
+            },
+            "layers": [
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "air",
+                    "parameters": {
+                        "material": "air.fmf"
+                    },
+                    "type": "semi"
+                },
+                {
+                    "color": [
+                        155,
+                        188,
+                        255,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "glass",
+                    "parameters": {
+                        "material": "glass.fmf",
+                        "thickness": [
+                            1100000.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "substrate"
+                },
+                {
+                    "color": [
+                        200,
+                        200,
+                        0,
+                        100
+                    ],
+                    "enable": true,
+                    "name": "layer",
+                    "parameters": {
+                        "thickness": [
+                            1.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "standard"
+                },
+                {
+                    "color": [
+                        249,
+                        228,
+                        121,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "ITO",
+                    "parameters": {
+                        "material": "low_ITO.fmf",
+                        "thickness": [
+                            50.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        230,
+                        255,
+                        181,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "HTL",
+                    "parameters": {
+                        "material": "organic.fmf",
+                        "thickness": [
+                            50.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        61,
+                        202,
+                        79,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "EML",
+                    "parameters": {
+                        "PL spectrum": "PLSpectrum_NPBRE76.txt",
+                        "anisotropy coefficient": [
+                            0.33,
+                            "VAR_0",
+                            false
+                        ],
+                        "eta_rad": [
+                            1.0,
+                            "VAR_0",
+                            false
+                        ],
+                        "gamma": [
+                            1.0,
+                            "VAR_0",
+                            false
+                        ],
+                        "material": "organic.fmf",
+                        "number of dipoles": 1.0,
+                        "thickness": [
+                            10.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "emission"
+                },
+                {
+                    "color": [
+                        230,
+                        255,
+                        181,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "ETL",
+                    "parameters": {
+                        "material": "organic.fmf",
+                        "thickness": [
+                            50.0,
+                            "VAR_1",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        179,
+                        179,
+                        179,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "Ag",
+                    "parameters": {
+                        "material": "Ag.fmf",
+                        "thickness": [
+                            100.0,
+                            "VAR_0",
+                            false
+                        ]
+                    },
+                    "type": "coherent"
+                },
+                {
+                    "color": [
+                        255,
+                        255,
+                        255,
+                        255
+                    ],
+                    "enable": true,
+                    "name": "air",
+                    "parameters": {
+                        "material": "air.fmf"
+                    },
+                    "type": "semi"
+                }
+            ],
+            "name": "OLED",
+            "optimization_settings": {
+                "maximize": true,
+                "maximum_number_of_iterations": 1000,
+                "name_of_value_to_be_optimized": "",
+                "plot_every_steps": 1,
+                "solver": "Nelder-Mead"
+            },
+            "variables": {
+                "VAR_0": [
+                    50.0,
+                    0.0,
+                    200.0,
+                    10.0,
+                    false
+                ],
+                "VAR_1": [
+                    50.0,
+                    0.0,
+                    150.0,
+                    10.0,
+                    true
+                ]
+            }
+        }
+    ]
+}
