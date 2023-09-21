@@ -1,0 +1,141 @@
+#SweepMe!v1.4.7.6
+
+*Mainwindow
+Autosave:	False
+Append:	False
+Nonstop:	False
+Tab:	[Measurement, Sequencer, Spectrometer1, Motor, Laser]
+geometry:	0.0042,0.0258,0.4000,0.5800
+
+*Sequencer
+#Item	Type	Value	isChecked	isExpanded
+1->	Laser	Switch	Arduino Laser controller	True	True
+    2->	Loop1	Loop	1000	False	True
+        3->	Hold	Hold	1.000	False	True
+            4->	Motor	Switch	OWIS StepMotor	True	True
+                5->	Loop2	Loop	8	False	True
+                    6->	MakeFile	MakeFile	ID	True	True
+                        7->	Spectrometer	Spectrometer	USBxxxx	True	True
+                            8->	PlotData	PlotData		True	True
+
+*PlotDialog
+geometry:	0.4302,0.0317,0.5312,0.5783
+2D_lines:	True
+3D_maps:	False
+linewidth:	1.0
+markersize:	2.0
+linestyle:	-
+markerstyle:	.
+opacity:	1.0
+x scale:	linear
+use x from:	True
+x from:	450
+use x to:	True
+x to:	700
+y scale:	linear
+use y from:	True
+y from:	0.0e-6
+use y to:	True
+y to:	8.0e-6
+z scale:	linear
+use z from:	False
+z from:	0.0
+use z to:	False
+z to:	1.0
+scaling mode:	Individual scaling
+colormap:	Vega10
+colormapz:	SimpleColor
+Grid:	True
+3D plot:	Tricontourf
+3D interpolation:	none
+3D colormap:	viridis
+x:	8
+y:	9
+z:	-1
+reshape:	2,4,5
+Slicing of Time:	:
+Slicing of Laser:	:
+Slicing of Loop1:	-2:
+Slicing of Motor:	:
+Slicing of Loop2:	:
+Slicing of Spectrometer:	:
+
+*Switch
+Label:	Laser
+Device:	Switch-Arduino_Laser_controller
+Device:	Switch-Arduino_Laser_controller
+Port:	COM3
+Port:	COM3
+SweepValue:	SweepEditor
+SweepValue:	SweepEditor
+SweepMode:	voltage [V]
+SweepMode:	voltage [V]
+Parameter:	adjust=n, spot=405
+Configuration:	0
+#SweepEditor	Row	Loop	Start	End	Checked	Step/Points	Hold [s]	Stop [s]
+SweepEditor:	0	1	0.0	0.0	False	0.1	0	0.0
+SweepEditor:	1	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	2	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	3	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	4	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	5	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	6	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	7	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	8	0	0.0	0.0	False	0.1	0.0	0.0
+SweepScript:	SweepScripts\-90_+90deg_zero_every_10steps.txt
+
+*Switch
+Label:	Motor
+Device:	Switch-OWIS_PS10-32
+Device:	Switch-OWIS_PS10-32
+Port:	COM4
+Port:	COM4
+SweepValue:	SweepScript
+SweepValue:	SweepScript
+SweepMode:	Angle [deg]
+SweepMode:	Angle [deg]
+Parameter:	offset=0.0
+Configuration:	10
+SweepBox:	0
+#SweepEditor	Row	Loop	Start	End	Checked	Step/Points	Hold [s]	Stop [s]
+SweepEditor:	0	0	-50	50	False	100	1.0	0.0
+SweepEditor:	1	0	-10	10	False	3	1.0	0.0
+SweepEditor:	2	1	-55	55	False	110	0	0.0
+SweepEditor:	3	0	-80	-10	False	10	1	0.0
+SweepEditor:	4	0	10	80	False	10	1	0.0
+SweepEditor:	5	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	6	0	50	60	False	10	15	0.0
+SweepEditor:	7	0	-44	-38	False	1	0.0	0.0
+SweepEditor:	8	0	38	44	False	1	0.0	0.0
+SweepScript:	C:\Users\Public\Documents\SweepMe!\SweepScripts\-90_+90deg_ref_10deg_every_10steps_less_hold.txt
+
+*Spectrometer
+Device:	Spectrometer-OceanOptics_USB4000
+Device:	Spectrometer-OceanOptics_USB4000
+Port:	<SeaBreezeDevice USB2000:USB2G8034>
+Port:	<SeaBreezeDevice USB2000:USB2G8034>
+Calibration:	USB2G8034_120909
+Calibration:	USB2G8034_120909
+SweepValue:	SweepEditor
+SweepValue:	SweepEditor
+SweepMode:	None
+SweepMode:	None
+#SweepEditor	Row	Loop	Start	End	Checked	Step/Points	Hold [s]	Stop [s]
+SweepEditor:	0	1	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	1	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	2	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	3	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	4	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	5	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	6	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	7	0	0.0	0.0	False	0.1	0.0	0.0
+SweepEditor:	8	0	0.0	0.0	False	0.1	0.0	0.0
+IntegrationTime:	0.4
+Filter:	Filter0
+Filter:	Filter0
+Trigger:	Internal
+Trigger:	Internal
+TriggerDelay:	0.0
+ReferenceStart:	True
+IntegrationTimeAutomatic:	False
+IntegrationTimeMax:	10.0

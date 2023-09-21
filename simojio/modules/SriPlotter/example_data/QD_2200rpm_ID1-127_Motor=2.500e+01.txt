@@ -1,0 +1,5 @@
+Time	voltage	position	Wavelength	Intensity	Integration time	Peak wavelength	Total intensity	CIEx	CIEy
+[s]	[V]	[deg]	[nm]	[uJ]	[s]	[nm]	[a.u.]
+Time	Laser	Motor	Spectrometer	Spectrometer	Spectrometer	Spectrometer	Spectrometer	Spectrometer	Spectrometer
+
+4.34656660e+02	0.00000000e+00	2.50000000e+01	--	--	4.00000000e-01	1.01702455e+03	7.12062134e-05	5.69418147e-01	4.31983825e-01
