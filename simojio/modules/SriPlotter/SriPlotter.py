@@ -2,13 +2,13 @@ from abc import ABC
 import matplotlib.pyplot as plt
 
 # imports for simoji interface
-from simoji.lib.abstract_modules import Plotter
-from simoji.lib.parameters import *
+from simojio.lib.abstract_modules import Plotter
+from simojio.lib.parameters import *
 
 # imports of SriReader module
-from simoji.modules.SriPlotter.AngleSpectrumReader import AngleSpectrumReader
-from simoji.modules.SriPlotter.FitType import FitType
-from simoji.lib.BasicFunctions import *
+from simojio.modules.SriPlotter.AngleSpectrumReader import AngleSpectrumReader
+from simojio.modules.SriPlotter.FitType import FitType
+from simojio.lib.BasicFunctions import *
 
 
 class SriPlotter(Plotter, ABC):
