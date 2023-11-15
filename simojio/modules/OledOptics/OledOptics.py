@@ -277,22 +277,22 @@ class OledOptics(Calculator):
         # optical_constants_list = []
         for idx, layer in enumerate(self.layer_list):
             material_par = self.get_layer_parameter(self.material_par, layer)
-            if material_par.is_updated:
-                # read optical constants from file
-                material_file = os.path.join(self.material_par.path, self.get_layer_parameter_value(material_par,
-                                                                                                    layer))
-                [wl_list, n_list, k_list] = mat_file_reader.read_optical_constants_from_fmf_file(material_file)
 
-                # interpolate to given wavelength grid
-                n_interpol = np.interp(x=self.wavelength_arr, xp=wl_list, fp=n_list)
-                k_interpol = np.interp(x=self.wavelength_arr, xp=wl_list, fp=k_list)
-                nk_complex = n_interpol + 1.j * k_interpol
+            # read optical constants from file
+            material_file = os.path.join(self.material_par.path, self.get_layer_parameter_value(material_par,
+                                                                                                layer))
+            [wl_list, n_list, k_list] = mat_file_reader.read_optical_constants_from_fmf_file(material_file)
 
-                # store complex refractive index
-                try:
-                    self.optical_constants_arr[idx] = np.array(nk_complex)
-                except:
-                    self.optical_constants_arr.append(np.array(nk_complex))
+            # interpolate to given wavelength grid
+            n_interpol = np.interp(x=self.wavelength_arr, xp=wl_list, fp=n_list)
+            k_interpol = np.interp(x=self.wavelength_arr, xp=wl_list, fp=k_list)
+            nk_complex = n_interpol + 1.j * k_interpol
+
+            # store complex refractive index
+            try:
+                self.optical_constants_arr[idx] = np.array(nk_complex)
+            except:
+                self.optical_constants_arr.append(np.array(nk_complex))
 
     def get_normalized_pl_spectra_dict(self):
         """Normalize each spectrum to the sum of the integration value of all single spectra"""
@@ -303,11 +303,12 @@ class OledOptics(Calculator):
         for emission_layer_idx in self.emission_layer_index_list:
             layer = self.layer_list[emission_layer_idx]
             pl_par = self.get_layer_parameter(self.pl_spectrum_par, layer)
-            if pl_par.is_updated:
-                pl_spectrum_file = self.get_layer_parameter_value(pl_par, layer)
-                pl_spectrum = self._get_single_pl_spectrum_from_file(pl_spectrum_file)
-                self.pl_spectra_dict.update({emission_layer_idx: pl_spectrum})
-                any_update = True
+            # print(pl_par, self.is_layer_parameter_updated(pl_par, layer))
+            # if self.is_layer_parameter_updated(pl_par, layer):
+            pl_spectrum_file = self.get_layer_parameter_value(pl_par, layer)
+            pl_spectrum = self._get_single_pl_spectrum_from_file(pl_spectrum_file)
+            self.pl_spectra_dict.update({emission_layer_idx: pl_spectrum})
+            any_update = True
 
         # normalize spectra by sum of integration values of all spectra (recalculate if any spectrum changes)
         if any_update:
