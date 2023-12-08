@@ -84,7 +84,9 @@ The following python packages are needed:
 > anytree <br>
 > psutil <br>
 
-Note: For more recent python versions (>3.6), the multiprocessing pickling might not work for Windows. We work on that.
+Note: For more recent python versions (>3.6), the multiprocessing pickling is failing. 
+Thus, the python version needs to be python3.6.
+We work on that.
 Sorry for any inconvenience.
 
 ## Installation
