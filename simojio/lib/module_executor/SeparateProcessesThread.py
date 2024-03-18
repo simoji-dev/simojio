@@ -1,5 +1,5 @@
 import PySide6.QtCore as QtCore
-import multiprocessing as mp
+import multiprocess as mp
 from typing import List, Dict, Optional
 
 from simojio.lib.enums.ExecutionMode import ExecutionMode

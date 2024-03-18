@@ -1,4 +1,4 @@
-import multiprocessing as mp
+import multiprocess as mp
 from typing import List, Tuple, Dict, Optional
 from anytree import search
 import copy
@@ -15,6 +15,16 @@ from simojio.lib.ModuleLoader import ModuleLoader
 from simojio.lib.enums.ParameterCategory import ParameterCategory
 from simojio.lib.abstract_modules import Calculator
 from simojio.lib.CallbackContainer import CallbackContainer
+
+
+def _set_sample_indices_and_make_copy(sample: Sample, evaluation_set_idx=0, variation_idx=0):
+    sample.current_evaluation_set_index = evaluation_set_idx
+    sample.current_variation_index = variation_idx
+    return copy.deepcopy(sample)
+
+
+def _create_fork_node(parent_node: MyNode, name: str) -> ForkNode:
+    return ForkNode(name=name, parent=parent_node)
 
 
 class SampleListResolver:
@@ -75,10 +85,10 @@ class SampleListResolver:
             if self.module_has_evaluation_set_parameters:
                 nb_common_evaluation_sets = min([len(sample.get_evaluation_sets()) for sample in sample_list])
                 for evaluation_set_idx in range(nb_common_evaluation_sets):
-                    fork_node = self._create_fork_node(parent_node=root,
+                    fork_node = _create_fork_node(parent_node=root,
                                                        name=self._get_evaluation_set_name(evaluation_set_idx))
-                    sample_copy_list = [self._set_sample_indices_and_make_copy(sample,
-                                                                               evaluation_set_idx=evaluation_set_idx)
+                    sample_copy_list = [_set_sample_indices_and_make_copy(sample,
+                                                                          evaluation_set_idx=evaluation_set_idx)
                                         for sample in sample_list]
                     self._create_leave_group_nodes(parent_node=fork_node, leave_name_list=sample_names,
                                                    sample_list=sample_copy_list)
@@ -88,7 +98,7 @@ class SampleListResolver:
         else:
             if self.is_variation_mode or self.module_has_evaluation_set_parameters:
                 for sample in sample_list:
-                    sample_node = self._create_fork_node(parent_node=root, name=sample.name)
+                    sample_node = _create_fork_node(parent_node=root, name=sample.name)
                     variation_container = sample_variation_dict[sample.name]
 
                     if self.module_has_evaluation_set_parameters:
@@ -96,7 +106,7 @@ class SampleListResolver:
 
                         if self.is_variation_mode:
                             for evaluation_set_idx in range(nb_evaluation_sets):
-                                evaluation_set_node = self._create_fork_node(parent_node=sample_node,
+                                evaluation_set_node = _create_fork_node(parent_node=sample_node,
                                                                              name=self._get_evaluation_set_name(
                                                                                  evaluation_set_idx))
                                 variation_names, variation_samples = self._get_variation_names_and_sample_copies(
@@ -138,8 +148,8 @@ class SampleListResolver:
 
         for evaluation_set_idx in range(nb_evaluation_sets):
             name_list.append(self._get_evaluation_set_name(evaluation_set_idx))
-            sample_list.append(self._set_sample_indices_and_make_copy(sample=sample,
-                                                                      evaluation_set_idx=evaluation_set_idx))
+            sample_list.append(_set_sample_indices_and_make_copy(sample=sample,
+                                                                 evaluation_set_idx=evaluation_set_idx))
 
         return name_list, sample_list
 
@@ -152,26 +162,16 @@ class SampleListResolver:
 
         for variation_idx in range(nb_variations):
             name_list.append(self._get_variation_name(variation_idx))
-            sample_list.append(self._set_sample_indices_and_make_copy(sample=sample,
-                                                                      evaluation_set_idx=evaluation_set_idx,
-                                                                      variation_idx=variation_idx))
+            sample_list.append(_set_sample_indices_and_make_copy(sample=sample,
+                                                                 evaluation_set_idx=evaluation_set_idx,
+                                                                 variation_idx=variation_idx))
         return name_list, sample_list
-
-    @staticmethod
-    def _set_sample_indices_and_make_copy(sample: Sample, evaluation_set_idx=0, variation_idx=0):
-        sample.current_evaluation_set_index = evaluation_set_idx
-        sample.current_variation_index = variation_idx
-        return copy.deepcopy(sample)
 
     def _get_evaluation_set_name(self, evaluation_set_idx: int):
         return self.evaluation_set_prefix + str(evaluation_set_idx)
 
     def _get_variation_name(self, variation_idx: int):
         return self.variable_set_prefix + str(variation_idx)
-
-    @staticmethod
-    def _create_fork_node(parent_node: MyNode, name: str) -> ForkNode:
-        return ForkNode(name=name, parent=parent_node)
 
     def _create_leave_group_nodes(self, parent_node: MyNode, leave_name_list: List[str], sample_list: List[Sample],
                                   force_make_global_tab=False):

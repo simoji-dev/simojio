@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import multiprocessing as mp
+import multiprocess as mp
 from matplotlib.ticker import MaxNLocator
 from typing import List, Optional
 from anytree import RenderTree, render

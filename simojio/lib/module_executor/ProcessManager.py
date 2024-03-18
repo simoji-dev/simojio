@@ -1,4 +1,4 @@
-import multiprocessing
+import multiprocess
 import psutil
 from typing import Optional, Callable
 
@@ -10,11 +10,11 @@ class ProcessManager:
         if nb_parallel_processes is None:
             nb_parallel_processes = self.get_nb_physical_cores() or 1       # at least one
 
-        self.sema = multiprocessing.Semaphore(nb_parallel_processes)
+        self.sema = multiprocess.Semaphore(nb_parallel_processes)
         self.process_list = []
 
     def start_process(self, target_func, *args, **kwargs):
-        p = multiprocessing.Process(target=self._func_and_release, args=(target_func, *args), kwargs=kwargs,
+        p = multiprocess.Process(target=self._func_and_release, args=(target_func, *args), kwargs=kwargs,
                                     daemon=True)
         self.process_list.append(p)
         self.sema.acquire()

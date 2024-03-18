@@ -1,4 +1,4 @@
-import multiprocessing as mp
+import multiprocess as mp
 from typing import *
 from PySide6.QtCore import Signal
 import PySide6.QtCore as QtCore

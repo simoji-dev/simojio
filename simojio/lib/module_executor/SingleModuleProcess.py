@@ -1,4 +1,4 @@
-import multiprocessing as mp
+import multiprocess as mp
 import numpy as np
 from typing import Optional, List
 import copy
@@ -14,6 +14,10 @@ from simojio.lib.module_executor.shared_functions import plot_optimization_steps
 from simojio.lib.abstract_modules import Calculator, Fitter
 
 plt.rcParams.update({'figure.max_open_warning': 0})  # mute warning "More than 20 figures have been opened"
+
+
+def _get_process_name() -> str:
+    return mp.current_process().name
 
 
 class SingleModuleProcess:
@@ -149,10 +153,6 @@ class SingleModuleProcess:
         else:
             return optimization_value
 
-    @staticmethod
-    def _get_process_name() -> str:
-        return mp.current_process().name
-
     def _set_queues(self, result_queue: mp.Queue, optimization_queue: mp.Queue, global_queue: mp.Queue,
                     stop_queue: mp.Queue):
         self.optimization_queue = optimization_queue
@@ -167,7 +167,7 @@ class SingleModuleProcess:
         except:
             pass
         if stop_msg is not None:
-            raise ValueError("Terminate optimization of " + self._get_process_name())
+            raise ValueError("Terminate optimization of " + _get_process_name())
 
 
 if __name__ == "__main__":

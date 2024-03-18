@@ -1,4 +1,4 @@
-import multiprocessing as mp
+import multiprocess as mp
 
 from simojio.lib.module_executor.LeaveNode import LeaveNode
 from simojio.lib.module_executor.MyNode import MyNode

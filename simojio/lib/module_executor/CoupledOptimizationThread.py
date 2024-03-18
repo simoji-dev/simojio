@@ -2,7 +2,7 @@ import PySide6.QtCore as QtCore
 from typing import List, Tuple
 import numpy as np
 from scipy.optimize import minimize
-import multiprocessing as mp
+import multiprocess as mp
 
 from simojio.lib.GlobalSettingsContainer import GlobalSettingsContainer
 from simojio.lib.MyNode import MyNode

@@ -12,7 +12,7 @@ class AbstractModule(metaclass=abc.ABCMeta):
     """Abstract class that defines the basic methods and members of any simojio module"""
 
     module_path = None                       # relative path to the module given as list
-    queue = None                             # multiprocessing.Queue for communication of results
+    queue = None                             # multiprocess.Queue for communication of results
     simoji_save_dir = None                   # save directory of the specific module instance
 
     generic_parameters = list()              # list of defined generic parameters
