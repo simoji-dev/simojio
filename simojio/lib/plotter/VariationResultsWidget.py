@@ -1,6 +1,6 @@
 import csv
 
-import PySide2.QtWidgets as QtWidgets
+import PySide6.QtWidgets as QtWidgets
 from simojio.lib.VariationResultsContainer import VariationResultsContainer
 from simojio.lib.BasicFunctions import *
 

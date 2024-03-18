@@ -1,5 +1,5 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtGui as QtGui
 from simojio.lib.gui.decoration.QHLine import QHLine
 
 from simojio.lib.parameters.FloatParameter import FloatParameter

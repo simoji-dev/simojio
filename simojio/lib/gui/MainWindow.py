@@ -2,8 +2,9 @@ import shutil
 import sys
 import tempfile
 import webbrowser
-import PySide2.QtGui as QtGui
-import PySide2.QtCore as QtCore
+import PySide6.QtGui as QtGui
+import PySide6.QtCore as QtCore
+import PySide6.QtWidgets as QtWidgets
 from typing import List
 
 import simojio.lib.BasicFunctions as BasicFunctions
@@ -69,11 +70,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.save_path_dialog = SavePathDialog()
 
         # -- actions --
-        self.runAction = QtWidgets.QAction(QtGui.QIcon(BasicFunctions.icon_path('run.svg')), 'Run', self)
-        # self.saveButton = QtWidgets.QAction(QtGui.QIcon(BasicFunctions.icon_path('save_tick.svg')), 'Save results',
+        self.runAction = QtGui.QAction(QtGui.QIcon(BasicFunctions.icon_path('run.svg')), 'Run', self)
+        # self.saveButton = QtGui.QAction(QtGui.QIcon(BasicFunctions.icon_path('save_tick.svg')), 'Save results',
         #                                     self)
-        self.tabifyAction = QtWidgets.QAction("tabify parameter widgets")
-        self.showPlotWindowAction = QtWidgets.QAction("show plot window")
+        self.tabifyAction = QtGui.QAction("tabify parameter widgets")
+        self.showPlotWindowAction = QtGui.QAction("show plot window")
 
         self.init_ui()
         self.load_setting(setting_path)
@@ -110,18 +111,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.runAction.setToolTip('run (F5)')
         self.runAction.triggered.connect(self.start_btn_clicked)
 
-        stopAction = QtWidgets.QAction(QtGui.QIcon(BasicFunctions.icon_path('stop.svg')), 'Stop', self)
+        stopAction = QtGui.QAction(QtGui.QIcon(BasicFunctions.icon_path('stop.svg')), 'Stop', self)
         stopAction.setToolTip('stop')
         stopAction.triggered.connect(self.stop_btn_clicked)
 
         # -- module combo, execution mode combo --
-        self.module_combo.activated[str].connect(self.module_combo_on_activated)
+        self.module_combo.activated[int].connect(self.module_combo_on_activated)
         self.populate_module_combo()
 
         self.execution_mode_combo.addItems([ExecutionMode.SINGLE, ExecutionMode.VARIATION, ExecutionMode.OPTIMIZATION,
                                             ExecutionMode.COUPLED_OPTIMIZATION])
         self.execution_mode_combo.setToolTip("execution mode")
-        self.execution_mode_combo.activated[str].connect(self.execution_mode_combo_on_activated)
+        self.execution_mode_combo.activated[int].connect(self.execution_mode_combo_on_activated)
 
         # -- global button --
         self.global_button.setToolTip("Use global optimization settings")
@@ -166,26 +167,26 @@ class MainWindow(QtWidgets.QMainWindow):
         helpMenu = menubar.addMenu('&Help')
 
         # -- File menu --
-        NewSettingAct = QtWidgets.QAction('New setting', self)
+        NewSettingAct = QtGui.QAction('New setting', self)
         NewSettingAct.triggered.connect(self.new_setting)
 
         impMenu = QtWidgets.QMenu('Open', self)
         impMenu.setIcon(QtGui.QIcon(BasicFunctions.icon_path('open.svg')))
-        impAct = QtWidgets.QAction('Open setting', self)
+        impAct = QtGui.QAction('Open setting', self)
         impAct.triggered.connect(self.import_setting)
         impMenu.addAction(impAct)
 
-        loadAct = QtWidgets.QAction('Add setting', self)
+        loadAct = QtGui.QAction('Add setting', self)
         loadAct.triggered.connect(self.add_setting)
         impMenu.addAction(loadAct)
 
         expMenu = QtWidgets.QMenu('Save', self)
         expMenu.setIcon(QtGui.QIcon(BasicFunctions.icon_path('save.svg')))
-        SaveSettingAct = QtWidgets.QAction('Save setting', self)
+        SaveSettingAct = QtGui.QAction('Save setting', self)
         SaveSettingAct.triggered.connect(self.save_setting_clicked)
         expMenu.addAction(SaveSettingAct)
 
-        exitAction = QtWidgets.QAction(QtGui.QIcon(BasicFunctions.icon_path('exit.svg')), 'Exit', self)
+        exitAction = QtGui.QAction(QtGui.QIcon(BasicFunctions.icon_path('exit.svg')), 'Exit', self)
         exitAction.setShortcut(QtGui.QKeySequence('Ctrl+Q'))
         exitAction.triggered.connect(self.closeEvent)
 
@@ -203,7 +204,7 @@ class MainWindow(QtWidgets.QMainWindow):
         viewMenu.addAction(self.showPlotWindowAction)
 
         # -- Help menu --
-        wikiAction = QtWidgets.QAction('Open wiki in webbrowser', self)
+        wikiAction = QtGui.QAction('Open wiki in webbrowser', self)
         wikiAction.triggered.connect(self.open_wiki)
 
         helpMenu.addAction(wikiAction)

@@ -1,4 +1,4 @@
-import PySide2.QtWidgets as QtWidgets
+import PySide6.QtWidgets as QtWidgets
 
 from simojio.lib.gui.parameter_widgets.ParameterWidget import ParameterWidget
 from simojio.lib.parameters.FixFloatParameter import FixFloatParameter

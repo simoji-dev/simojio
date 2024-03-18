@@ -1,7 +1,7 @@
 import multiprocessing as mp
 from typing import *
-from PySide2.QtCore import Signal
-import PySide2.QtCore as QtCore
+from PySide6.QtCore import Signal
+import PySide6.QtCore as QtCore
 
 from simojio.lib.plotter.MainPlotWindow import MainPlotWindow
 from simojio.lib.ModuleLoader import ModuleLoader

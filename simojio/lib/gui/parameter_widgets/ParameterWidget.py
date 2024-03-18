@@ -1,6 +1,6 @@
-import PySide2.QtWidgets as QtWidgets
-from PySide2.QtCore import Signal
-import PySide2.QtGui as QtGui
+import PySide6.QtWidgets as QtWidgets
+from PySide6.QtCore import Signal
+import PySide6.QtGui as QtGui
 
 from simojio.lib.parameters.SingleParameter import SingleParameter
 from simojio.lib.parameters.NestedParameter import NestedParameter

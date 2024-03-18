@@ -1,5 +1,5 @@
-from PySide2.QtWidgets import QFrame
-from PySide2.QtGui import QPalette, QColor
+from PySide6.QtWidgets import QFrame
+from PySide6.QtGui import QPalette, QColor
 
 
 class QHLine(QFrame):

@@ -1,4 +1,4 @@
-import PySide2.QtWidgets as QtWidgets
+import PySide6.QtWidgets as QtWidgets
 
 
 class RotatedButton(QtWidgets.QPushButton):

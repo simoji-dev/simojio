@@ -1,4 +1,5 @@
-import PySide2.QtWidgets as QtWidgets
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtGui as QtGui
 from typing import Union, Callable
 
 from simojio.lib.gui.parameter_container_widgets.ParameterContainerWidget import ParameterContainerWidget
@@ -27,7 +28,7 @@ class ParameterContainerScrollWidget(QtWidgets.QScrollArea):
     def set_parameter_container(self, parameter_container: ParameterContainer):
         self.parameter_container_widget.set_parameter_container(parameter_container)
 
-    def add_context_menu_action(self, action: QtWidgets.QAction, connected_method: Callable):
+    def add_context_menu_action(self, action: QtGui.QAction, connected_method: Callable):
         self.parameter_container_widget.add_context_menu_action(action, connected_method)
 
     def add_parameter(self, parameter: Union[SingleParameter, NestedParameter, MultivalueParameter], is_deletable=False):

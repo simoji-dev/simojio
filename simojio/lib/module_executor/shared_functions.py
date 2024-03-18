@@ -6,7 +6,7 @@ from typing import List, Optional
 from anytree import RenderTree, render
 from anytree.exporter import UniqueDotExporter
 import os
-import PySide2.QtWidgets as QtWidgets
+import PySide6.QtWidgets as QtWidgets
 
 from simojio.lib.module_executor.MyNode import MyNode
 from simojio.lib.PlotContainer import PlotContainer

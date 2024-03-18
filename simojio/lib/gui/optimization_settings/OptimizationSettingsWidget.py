@@ -1,6 +1,6 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
-from PySide2.QtCore import Signal
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtGui as QtGui
+from PySide6.QtCore import Signal
 
 from simojio.lib.OptimizationSettingsContainer import OptimizationSettingsContainer
 from simojio.lib.gui.OptionsWidget import OptionsWidget
@@ -27,7 +27,7 @@ class OptimizationSettingsWidget(OptionsWidget):
             # value to be optimized
             self.value_to_be_optimized_label = "value to be optimized:"
             self.value_to_be_optimized_combo = QtWidgets.QComboBox()
-            self.value_to_be_optimized_combo.activated[str].connect(self._update_name_of_value_to_be_optimized)
+            self.value_to_be_optimized_combo.activated[int].connect(self._update_name_of_value_to_be_optimized)
 
             # add options to category
             self.add_option_to_category(category_name=self.sample_related_options_header_str,
@@ -41,7 +41,7 @@ class OptimizationSettingsWidget(OptionsWidget):
         # solver
         self.solver_label = "solver:"
         self.solver_combo = QtWidgets.QComboBox()
-        self.solver_combo.activated[str].connect(self._update_solver)
+        self.solver_combo.activated[int].connect(self._update_solver)
 
         # maximize
         self.maximize_label = "maximize:"

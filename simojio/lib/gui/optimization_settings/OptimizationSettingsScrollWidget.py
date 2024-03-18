@@ -1,4 +1,4 @@
-import PySide2.QtWidgets as QtWidgets
+import PySide6.QtWidgets as QtWidgets
 
 from simojio.lib.gui.optimization_settings.OptimizationSettingsWidget import OptimizationSettingsWidget
 from simojio.lib.OptimizationSettingsContainer import OptimizationSettingsContainer
