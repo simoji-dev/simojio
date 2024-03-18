@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simojio"
+version = "2.1.0"
+dependencies = [
+  "PySide6",
+  "numpy",
+  "scipy",
+  "matplotlib",
+  "anytree",
+  "psutil",
+  "packaging",
+  "platformdirs>=2.1"
+]
+requires-python = ">=3.7"
+authors = [
+  {name = "elmogit"},
+]
+maintainers = [
+  {name = "elmogit"}
+]
+description = "Framework for running python modules with multidimensional parameter sets."
+readme = "README.md"
+license = {file = "LICENSE.md"}
+keywords = ["oled", "optical simulation", "transfer matrix"]
+classifiers = [
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Repository = "https://github.com/simoji-dev/simojio"
