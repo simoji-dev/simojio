@@ -1,7 +1,7 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
-import PySide2.QtGui as QtGui
-from PySide2.QtCore import Signal
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtCore as QtCore
+import PySide6.QtGui as QtGui
+from PySide6.QtCore import Signal
 
 import simojio.lib.BasicFunctions as BasicFunctions
 from simojio.lib.gui.Buttons import RotatedButton
@@ -110,11 +110,11 @@ class SideWidgetGlobalSettings(QtWidgets.QMainWindow):
         self._side_toolbar.addSeparator()
 
         # -- dock widgets --
-        add_variable_action = QtWidgets.QAction("Add global variable", self)
+        add_variable_action = QtGui.QAction("Add global variable", self)
         self._variables_widget.add_context_menu_action(add_variable_action, self._add_global_variable)
         self._variables_widget.set_parameter_container(ParameterContainer(ParameterCategory.VARIABLE))
 
-        add_expression_action = QtWidgets.QAction("Add global expression", self)
+        add_expression_action = QtGui.QAction("Add global expression", self)
         self._expressions_widget.add_context_menu_action(add_expression_action, self._add_global_expression)
         self._expressions_widget.set_parameter_container(ParameterContainer(ParameterCategory.EXPRESSION))
 

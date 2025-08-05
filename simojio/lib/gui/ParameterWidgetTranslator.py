@@ -1,4 +1,4 @@
-import PySide2.QtWidgets as QtWidgets
+import PySide6.QtWidgets as QtWidgets
 
 from simojio.lib.parameters import *
 

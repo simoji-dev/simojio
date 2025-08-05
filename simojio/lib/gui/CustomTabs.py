@@ -1,6 +1,7 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
-from PySide2.QtCore import Signal
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtCore as QtCore
+import PySide6.QtGui as QtGui
+from PySide6.QtCore import Signal
 
 from typing import Callable
 
@@ -41,6 +42,6 @@ class CustomTabs(QtWidgets.QTabWidget):
         self.tab_idx_context_menu = self.tabBar().tabAt(point)      # store index of tab at which the context opened
         self.popMenu.exec_(self.mapToGlobal(point))                 # show context menu
 
-    def add_context_menu_action(self, action: QtWidgets.QAction, connected_method: Callable):
+    def add_context_menu_action(self, action: QtGui.QAction, connected_method: Callable):
         action.triggered.connect(connected_method)
         self.popMenu.addAction(action)

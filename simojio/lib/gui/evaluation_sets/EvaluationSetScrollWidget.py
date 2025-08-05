@@ -1,4 +1,4 @@
-import PySide2.QtWidgets as QtWidgets
+import PySide6.QtWidgets as QtWidgets
 from typing import List
 
 from simojio.lib.gui.evaluation_sets.MultiEvaluationSetContainersWidget import MultiEvaluationSetContainersWidget

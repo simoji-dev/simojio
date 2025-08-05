@@ -1,7 +1,7 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
-import PySide2.QtCore as QtCore
-from PySide2.QtCore import Signal
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtGui as QtGui
+import PySide6.QtCore as QtCore
+from PySide6.QtCore import Signal
 
 from simojio.lib.gui.CustomTabs import CustomTabs
 from simojio.lib.gui.SampleWidget import SampleWidget
@@ -41,16 +41,16 @@ class SampleTabWidget(QtWidgets.QMainWindow):
         self.setCentralWidget(self.tabs)
 
         # -- context menu for right clicking tabs --
-        self.enable_action = QtWidgets.QAction(QtGui.QIcon(icon_path("enable.svg")), "enable/disable")
+        self.enable_action = QtGui.QAction(QtGui.QIcon(icon_path("enable.svg")), "enable/disable")
         self.tabs.add_context_menu_action(self.enable_action, self.enable_tab_clicked)
 
-        self.rename_action = QtWidgets.QAction(QtGui.QIcon(icon_path("edit.svg")), "rename")
+        self.rename_action = QtGui.QAction(QtGui.QIcon(icon_path("edit.svg")), "rename")
         self.tabs.add_context_menu_action(self.rename_action, self.rename_tab_clicked)
 
-        self.duplicate_action = QtWidgets.QAction(QtGui.QIcon(icon_path("duplicate.svg")), "duplicate")
+        self.duplicate_action = QtGui.QAction(QtGui.QIcon(icon_path("duplicate.svg")), "duplicate")
         self.tabs.add_context_menu_action(self.duplicate_action, self.duplicate_tab_clicked)
 
-        self.save_action = QtWidgets.QAction(QtGui.QIcon(icon_path("save.svg")), "save")
+        self.save_action = QtGui.QAction(QtGui.QIcon(icon_path("save.svg")), "save")
         self.tabs.add_context_menu_action(self.save_action, self.save_tab)
 
         self.tabs.tabBarClicked.connect(self.store_idx_of_clicked_tab)

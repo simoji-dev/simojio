@@ -4,8 +4,8 @@ __author__ = "elmogit"
 
 if __name__ == '__main__':
 
-    import PySide2.QtWidgets as QtWidgets
-    import PySide2.QtGui as QtGui
+    import PySide6.QtWidgets as QtWidgets
+    import PySide6.QtGui as QtGui
     import sys
     import os
     from simojio.lib.icon_path import icon_path
@@ -64,6 +64,6 @@ if __name__ == '__main__':
     if args.enable_gui == "y":
         ex = MainWindow(args.setting, app)
         splash.finish(ex)
-        sys.exit(app.exec_())
+        sys.exit(app.exec())
     else:
         raise NotImplementedError("Execution of simojio without GUI not yet implemented")

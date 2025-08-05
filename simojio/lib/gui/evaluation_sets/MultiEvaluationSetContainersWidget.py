@@ -1,6 +1,7 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
-from PySide2.QtCore import Signal
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtCore as QtCore
+import PySide6.QtGui as QtGui
+from PySide6.QtCore import Signal
 from typing import List, Callable
 
 from simojio.lib.ParameterContainer import ParameterContainer
@@ -34,10 +35,10 @@ class MultiEvaluationSetContainersWidget(QtWidgets.QMainWindow):
         self.popMenu = QtWidgets.QMenu(self)
 
         # create context menu actions
-        self.add_action = QtWidgets.QAction("add evaluation set", self)
+        self.add_action = QtGui.QAction("add evaluation set", self)
         self.add_context_menu_action(self.add_action, self._add_evaluation_set_clicked)
 
-        self.remove_all_action = QtWidgets.QAction("remove all", self)
+        self.remove_all_action = QtGui.QAction("remove all", self)
         self.add_context_menu_action(self.remove_all_action, self._remove_all_clicked)
 
     def set_parameter_container_list(self, parameter_container_list: List[ParameterContainer]):
@@ -134,7 +135,7 @@ class MultiEvaluationSetContainersWidget(QtWidgets.QMainWindow):
     def on_context_menu(self, point):
         self.popMenu.exec_(self.mapToGlobal(point))
 
-    def add_context_menu_action(self, action: QtWidgets.QAction, connected_method: Callable):
+    def add_context_menu_action(self, action: QtGui.QAction, connected_method: Callable):
         action.triggered.connect(connected_method)
         self.popMenu.addAction(action)
 

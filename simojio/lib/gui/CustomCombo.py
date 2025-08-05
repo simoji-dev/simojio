@@ -1,6 +1,6 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
-import PySide2.QtCore as QtCore
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtGui as QtGui
+import PySide6.QtCore as QtCore
 
 
 class CustomCombo(QtWidgets.QComboBox):

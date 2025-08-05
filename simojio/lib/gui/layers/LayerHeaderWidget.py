@@ -1,6 +1,6 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
-from PySide2.QtCore import Signal
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtGui as QtGui
+from PySide6.QtCore import Signal
 from simojio.lib.CompleteLayer import CompleteLayer
 from simojio.lib.BasicFunctions import *
 
@@ -26,7 +26,7 @@ class LayerHeaderWidget(QtWidgets.QGroupBox):
         self.setStyleSheet("QGroupBox { border: 0px solid silver; background-color: rgba" + str(color)
                            + "; font: bold; padding: 5px;} QLabel {font: bold}")
         self.setMaximumHeight(25)
-        self.layout.setMargin(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.name_label = QtWidgets.QLabel(layer.name + " (" + layer.layer_type.value + ")")
 
         self.layout.addWidget(self.name_label)
