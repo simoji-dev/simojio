@@ -1,8 +1,8 @@
 # PySide2 stuff
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
-import PySide2.QtCore as QtCore
-from PySide2.QtCore import Signal
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtGui as QtGui
+import PySide6.QtCore as QtCore
+from PySide6.QtCore import Signal
 import matplotlib
 
 from .TabPlotWindow import TabPlotWindow
@@ -50,7 +50,7 @@ class MainPlotWindow(QtWidgets.QMainWindow):
 
         self.saveButton = QtWidgets.QToolButton()
         self.saveButton.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
-        self.saveAction = QtWidgets.QAction()
+        self.saveAction = QtGui.QAction()
         self.saveAction.setIcon(QtGui.QIcon(BasicFunctions.icon_path('save_tick.svg')))
         self.saveAction.setText('Save results')
         self.saveAction.setShortcut(QtGui.QKeySequence('Ctrl+S'))
@@ -180,13 +180,11 @@ class MainPlotWindow(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         """Overwrite method of QMainWindow class"""
 
-        # ignore original event (try/except because file menu action doesn't provide event object)
-        try:
-            event.ignore()
-        except:
-            pass
-
+        # Emit the closed signal
         self.closed_sig.emit()
+        
+        # Accept the close event to allow the window to close
+        event.accept()
 
     def save_btn_clicked(self):
         self.save_results_sig.emit()

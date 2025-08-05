@@ -1,4 +1,4 @@
-import PySide2.QtGui as QtGui
+import PySide6.QtGui as QtGui
 
 from simojio.lib.gui.parameter_widgets.ParameterWidget import ParameterWidget
 from simojio.lib.parameters.PathParameter import PathParameter

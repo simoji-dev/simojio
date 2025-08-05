@@ -1,6 +1,6 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
-from PySide2.QtCore import Signal
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtGui as QtGui
+from PySide6.QtCore import Signal
 
 from simojio.lib.CompleteLayer import CompleteLayer
 from simojio.lib.enums.LayerType import LayerType
@@ -28,23 +28,23 @@ class LayerWidget(ParameterContainerWidget):
         self.set_color(layer.color)
 
         # create context menu actions
-        self.add_action = QtWidgets.QAction("add layer", self)
+        self.add_action = QtGui.QAction("add layer", self)
         self.add_context_menu_action(self.add_action, self.add_clicked)
 
-        self.rename_action = QtWidgets.QAction("rename layer", self)
+        self.rename_action = QtGui.QAction("rename layer", self)
         self.add_context_menu_action(self.rename_action, self.rename_clicked)
 
-        self.collapse_all_action = QtWidgets.QAction("collapse all", self)
+        self.collapse_all_action = QtGui.QAction("collapse all", self)
         self.add_context_menu_action(self.collapse_all_action, self._collapse_all_clicked)
 
-        self.remove_all_action = QtWidgets.QAction("remove all", self)
+        self.remove_all_action = QtGui.QAction("remove all", self)
         self.add_context_menu_action(self.remove_all_action, self._remove_all_clicked)
 
         if self.layer.layer_type is not LayerType.SEMI:
-            self.delete_action = QtWidgets.QAction("delete layer", self)
+            self.delete_action = QtGui.QAction("delete layer", self)
             self.add_context_menu_action(self.delete_action, self.delete_clicked)
 
-        self.set_color_action = QtWidgets.QAction("set color", self)
+        self.set_color_action = QtGui.QAction("set color", self)
         self.add_context_menu_action(self.set_color_action, self.open_color_dialog)
 
     def add_clicked(self):

@@ -1,7 +1,8 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtCore as QtCore
+import PySide6.QtGui as QtGui
 
-from PySide2.QtCore import Signal
+from PySide6.QtCore import Signal
 
 from simojio.lib.ParameterContainer import ParameterContainer
 from simojio.lib.parameters import *
@@ -37,7 +38,7 @@ class ParameterContainerWidget(QtWidgets.QGroupBox):
 
         # set layout
         self.layout = QtWidgets.QVBoxLayout()
-        self.layout.setMargin(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
 
         self.parameters_layout = QtWidgets.QVBoxLayout()
@@ -147,7 +148,7 @@ class ParameterContainerWidget(QtWidgets.QGroupBox):
         # show context menu
         self.popMenu.exec_(self.mapToGlobal(point))
 
-    def add_context_menu_action(self, action: QtWidgets.QAction, connected_method: Callable):
+    def add_context_menu_action(self, action: QtGui.QAction, connected_method: Callable):
         action.triggered.connect(connected_method)
         self.popMenu.addAction(action)
 

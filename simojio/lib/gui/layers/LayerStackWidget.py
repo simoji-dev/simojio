@@ -1,6 +1,6 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
-import PySide2.QtGui as QtGui
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtCore as QtCore
+import PySide6.QtGui as QtGui
 
 from simojio.lib.CompleteLayer import CompleteLayer
 from simojio.lib.gui.Dialogs import select_from_combobox
@@ -53,13 +53,13 @@ class LayerStackWidget(QtWidgets.QMainWindow):
         self.popMenu = QtWidgets.QMenu(self)
 
         # create context menu actions
-        self.add_action = QtWidgets.QAction("add layer", self)
+        self.add_action = QtGui.QAction("add layer", self)
         self.add_context_menu_action(self.add_action, self.add_layer_clicked)
 
-        self.collapse_all_action = QtWidgets.QAction("collapse all", self)
+        self.collapse_all_action = QtGui.QAction("collapse all", self)
         self.add_context_menu_action(self.collapse_all_action, self._collapse_all_clicked)
 
-        self.remove_all_action = QtWidgets.QAction("remove all", self)
+        self.remove_all_action = QtGui.QAction("remove all", self)
         self.add_context_menu_action(self.remove_all_action, self._remove_all_clicked)
 
     def set_layer_list(self, layer_list: list):
@@ -264,7 +264,7 @@ class LayerStackWidget(QtWidgets.QMainWindow):
         # show context menu
         self.popMenu.exec_(self.mapToGlobal(point))
 
-    def add_context_menu_action(self, action: QtWidgets.QAction, connected_method: Callable):
+    def add_context_menu_action(self, action: QtGui.QAction, connected_method: Callable):
         action.triggered.connect(connected_method)
         self.popMenu.addAction(action)
 

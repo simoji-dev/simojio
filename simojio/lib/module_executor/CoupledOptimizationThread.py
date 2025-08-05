@@ -1,4 +1,4 @@
-import PySide2.QtCore as QtCore
+import PySide6.QtCore as QtCore
 from typing import List, Tuple
 import numpy as np
 from scipy.optimize import minimize

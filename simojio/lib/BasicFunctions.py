@@ -42,7 +42,7 @@ def flatten(l: Union[list, tuple]):
 
 
 def convert_list_to_path_str(list_of_path_elements: list) -> str:
-    """
+    r"""
     Convert a path with its elements given in a list to a OS dependent str
     :param list_of_path_elements = ['dir1', 'dir2', 'filename']
     :return 'dir1/dir2/filename' (Linux) or 'dir1\dir2\filename' (Windows)
@@ -54,7 +54,7 @@ def convert_list_to_path_str(list_of_path_elements: list) -> str:
 
 
 def convert_path_str_to_list(path_str: str, extract_relative_path_only=True) -> list:
-    """
+    r"""
     Convert an OS dependent path str to a list of path elements
     :param path_str: 'dir1/dir2/filename' (Linux) or 'dir1\dir2\filename' (Windows)
     :return: ['dir1', 'dir2', 'filename']

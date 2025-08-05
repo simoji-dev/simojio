@@ -1,5 +1,6 @@
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtCore as QtCore
+import PySide6.QtWidgets as QtWidgets
+import PySide6.QtCore as QtCore
+import PySide6.QtGui as QtGui
 
 from simojio.lib.gui.evaluation_sets.EvaluationSetScrollWidget import EvaluationSetScrollWidget
 from simojio.lib.gui.parameter_widgets.FloatParWidget import FloatParWidget
@@ -76,12 +77,12 @@ class SampleWidget(QtWidgets.QMainWindow):
         self.layer_stack_widget.layer_stack_widget.float_par_added_sig.connect(self.add_float_par_widget)
         self.evaluation_sets_widget.evaluation_set_containers_widget.float_par_added_sig.connect(self.add_float_par_widget)
 
-        add_variable_action = QtWidgets.QAction("Add variable", self)
+        add_variable_action = QtGui.QAction("Add variable", self)
         self.variables_widget.add_context_menu_action(add_variable_action, self.add_variable)
         self.variables_widget.parameter_container_widget.parameter_added_sig.connect(self.sync_free_parameter_added)
         self.variables_widget.parameter_container_widget.parameter_deleted_sig.connect(self.sync_free_parameter_deleted)
 
-        add_expression_action = QtWidgets.QAction("Add expression", self)
+        add_expression_action = QtGui.QAction("Add expression", self)
         self.expressions_widget.add_context_menu_action(add_expression_action, self.add_expression)
         self.expressions_widget.parameter_container_widget.parameter_added_sig.connect(self.sync_free_parameter_added)
         self.expressions_widget.parameter_container_widget.parameter_deleted_sig.connect(self.sync_free_parameter_deleted)

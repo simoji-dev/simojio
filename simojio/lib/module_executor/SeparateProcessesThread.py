@@ -1,4 +1,4 @@
-import PySide2.QtCore as QtCore
+import PySide6.QtCore as QtCore
 import multiprocessing as mp
 from typing import List, Dict, Optional
 
